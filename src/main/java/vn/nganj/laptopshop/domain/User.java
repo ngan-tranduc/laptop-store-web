@@ -1,10 +1,15 @@
 package vn.nganj.laptopshop.domain;
 
+import jakarta.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String password;
-    private String fullnName;
+    private String fullName;
     private String address;
     private String phone;
 
@@ -32,12 +37,12 @@ public class User {
         this.password = password;
     }
 
-    public String getFullnName() {
-        return fullnName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullnName(String fullnName) {
-        this.fullnName = fullnName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getAddress() {
@@ -62,7 +67,7 @@ public class User {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", fullnName='" + fullnName + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';

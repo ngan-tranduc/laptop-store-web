@@ -1,12 +1,13 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo Người Dùng Mới</title>
+    <title>Chỉnh Sửa Người Dùng</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -21,11 +22,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .info-value {
-            color: #212529;
-            font-size: 1rem;
-            margin-top: 0.25rem;
-        }
         .info-item {
             padding: 1rem;
             border-bottom: 1px solid #f8f9fa;
@@ -33,17 +29,20 @@
         .info-item:last-child {
             border-bottom: none;
         }
-        .form-control, .form-select {
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-        }
-        .form-control:focus, .form-select:focus {
+        .form-control:focus {
             border-color: #86b7fe;
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
         .required::after {
             content: " *";
             color: #dc3545;
+        }
+        .readonly-field {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+        .toast {
+            min-width: 350px;
         }
     </style>
 </head>
@@ -53,7 +52,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex align-items-center justify-content-between">
-                <h2 class="mb-0 text-dark">Tạo Người Dùng Mới</h2>
+                <h2 class="mb-0 text-dark">Chỉnh Sửa Người Dùng</h2>
                 <a href="/admin/user" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-2"></i>
                     Quay lại
@@ -62,24 +61,40 @@
         </div>
     </div>
 
-    <!-- Create User Form Card -->
+    <!-- User Edit Form Card -->
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <div class="card detail-card">
                 <!-- Card Header -->
                 <div class="card-header bg-white py-3 border-bottom">
-                    <h5 class="mb-0 text-dark">Thông Tin Người Dùng</h5>
+                    <h5 class="mb-0 text-dark">Chỉnh Sửa Thông Tin Người Dùng</h5>
                 </div>
 
                 <!-- Card Body -->
                 <div class="card-body p-0">
-                    <form:form action="/admin/user/create" method="post" modelAttribute="newUser" id="createUserForm">
+                    <form:form method="post" action="/admin/user/edit" modelAttribute="currentUser" class="needs-validation" novalidate="true">
+                        <!-- Hidden field cho ID -->
+                        <form:input type="hidden" path="id" />
+
+                        <!-- User ID (Read-only) -->
+                        <div class="info-item">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label class="info-label">ID</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-control readonly-field" style="border: none; background-color: transparent; padding: 0;">
+                                            ${currentUser.id}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Full Name -->
                         <div class="info-item">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="fullName" class="info-label required">Họ và Tên</label>
+                                    <label class="info-label">Họ và Tên</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <form:input type="text"
@@ -88,27 +103,24 @@
                                                 placeholder="Nhập họ và tên đầy đủ"
                                                 required="true" />
                                     <div class="invalid-feedback">
-                                        Vui lòng nhập họ và tên.
+                                        Họ và tên quá ngắn.
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Email -->
+                        <!-- Email (Read-only) -->
                         <div class="info-item">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="email" class="info-label required">Email</label>
+                                    <label class="info-label">Email</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <form:input type="email"
-                                                class="form-control"
+                                                class="form-control readonly-field"
                                                 path="email"
-                                                placeholder="example@email.com"
-                                                required="true" />
-                                    <div class="invalid-feedback">
-                                        Vui lòng nhập email hợp lệ.
-                                    </div>
+                                                readonly="true" />
+                                    <small class="text-muted">Email không thể thay đổi</small>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +129,7 @@
                         <div class="info-item">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="phone" class="info-label required">Số Điện Thoại</label>
+                                    <label class="info-label">Số Điện Thoại</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <form:input type="tel"
@@ -126,7 +138,7 @@
                                                 placeholder="Nhập số điện thoại"
                                                 required="true" />
                                     <div class="invalid-feedback">
-                                        Vui lòng nhập số điện thoại hợp lệ (10-11 số).
+                                        Vui lòng nhập số điện thoại hợp lệ.
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +148,7 @@
                         <div class="info-item">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="address" class="info-label required">Địa Chỉ</label>
+                                    <label class="info-label">Địa Chỉ</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <form:textarea class="form-control"
@@ -145,26 +157,18 @@
                                                    placeholder="Nhập địa chỉ đầy đủ"
                                                    required="true" />
                                     <div class="invalid-feedback">
-                                        Vui lòng nhập địa chỉ.
+                                        Địa chỉ quá ngắn.
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Password -->
+                        <!-- Password Note -->
                         <div class="info-item">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <label for="password" class="info-label required">Mật khẩu</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <form:password class="form-control"
-                                                   path="password"
-                                                   placeholder="Nhập mật khẩu"
-                                                   required="true" />
-                                    <div class="invalid-feedback">
-                                        Mật khẩu phải có ít nhất 6 ký tự.
-                                    </div>
+                            <div class="alert alert-info d-flex align-items-center mb-0" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <div>
+                                    <strong>Lưu ý:</strong> Mật khẩu không được hiển thị và sẽ không bị thay đổi khi cập nhật thông tin.
                                 </div>
                             </div>
                         </div>
@@ -174,13 +178,13 @@
                 <!-- Card Footer -->
                 <div class="card-footer bg-light">
                     <div class="d-flex gap-2">
-                        <button type="submit" form="createUserForm" class="btn btn-primary">
-                            <i class="fas fa-check me-2"></i>
-                            Tạo Người Dùng
+                        <button type="button" class="btn btn-outline-warning" onclick="resetForm()">
+                            <i class="fas fa-undo me-1"></i>
+                            Hoàn tác
                         </button>
-                        <button type="reset" form="createUserForm" class="btn btn-outline-warning">
-                            <i class="fas fa-redo me-2"></i>
-                            Đặt lại
+                        <button type="submit" form="userEditForm" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>
+                            Cập nhật
                         </button>
                     </div>
                 </div>
@@ -223,69 +227,94 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Form validation
-    document.getElementById('createUserForm').addEventListener('submit', function(e) {
-        const form = this;
-        const email = document.querySelector('input[name="email"]').value;
-        const password = document.querySelector('input[name="password"]').value;
-        const fullName = document.querySelector('input[name="fullName"]').value;
-        const address = document.querySelector('textarea[name="address"]').value;
-        const phone = document.querySelector('input[name="phone"]').value;
+    // Bootstrap form validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 
-        let isValid = true;
+    // Custom form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            // Add ID to form for reference
+            form.id = 'userEditForm';
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.querySelector('input[name="email"]').classList.add('is-invalid');
-            isValid = false;
-        } else {
-            document.querySelector('input[name="email"]').classList.remove('is-invalid');
-            document.querySelector('input[name="email"]').classList.add('is-valid');
+            form.addEventListener('submit', function(e) {
+                const fullName = document.querySelector('input[name="fullName"]').value;
+                const address = document.querySelector('textarea[name="address"]').value;
+                const phone = document.querySelector('input[name="phone"]').value;
+
+                let isValid = true;
+
+                // Full name validation
+                if (fullName.trim().length < 2) {
+                    document.querySelector('input[name="fullName"]').classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    document.querySelector('input[name="fullName"]').classList.remove('is-invalid');
+                    document.querySelector('input[name="fullName"]').classList.add('is-valid');
+                }
+
+                // Address validation
+                if (address.trim().length < 5) {
+                    document.querySelector('textarea[name="address"]').classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    document.querySelector('textarea[name="address"]').classList.remove('is-invalid');
+                    document.querySelector('textarea[name="address"]').classList.add('is-valid');
+                }
+
+                // Phone validation
+                const phoneRegex = /^[0-9]{10,11}$/;
+                if (!phoneRegex.test(phone)) {
+                    document.querySelector('input[name="phone"]').classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    document.querySelector('input[name="phone"]').classList.remove('is-invalid');
+                    document.querySelector('input[name="phone"]').classList.add('is-valid');
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
         }
 
-        // Password validation
-        if (password.length < 6) {
-            document.querySelector('input[name="password"]').classList.add('is-invalid');
-            isValid = false;
-        } else {
-            document.querySelector('input[name="password"]').classList.remove('is-invalid');
-            document.querySelector('input[name="password"]').classList.add('is-valid');
-        }
-
-        // Full name validation
-        if (fullName.trim().length < 2) {
-            document.querySelector('input[name="fullName"]').classList.add('is-invalid');
-            isValid = false;
-        } else {
-            document.querySelector('input[name="fullName"]').classList.remove('is-invalid');
-            document.querySelector('input[name="fullName"]').classList.add('is-valid');
-        }
-
-        // Address validation
-        if (address.trim().length < 5) {
-            document.querySelector('textarea[name="address"]').classList.add('is-invalid');
-            isValid = false;
-        } else {
-            document.querySelector('textarea[name="address"]').classList.remove('is-invalid');
-            document.querySelector('textarea[name="address"]').classList.add('is-valid');
-        }
-
-        // Phone validation
-        const phoneRegex = /^[0-9]{10,11}$/;
-        if (!phoneRegex.test(phone)) {
-            document.querySelector('input[name="phone"]').classList.add('is-invalid');
-            isValid = false;
-        } else {
-            document.querySelector('input[name="phone"]').classList.remove('is-invalid');
-            document.querySelector('input[name="phone"]').classList.add('is-valid');
-        }
-
-        if (!isValid) {
-            e.preventDefault();
-            e.stopPropagation();
+        // Phone number validation - only allow digits
+        const phoneInput = document.querySelector('input[name="phone"]');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
         }
     });
+
+    // Reset form function
+    function resetForm() {
+        const form = document.getElementById('userEditForm');
+        if (form) {
+            form.reset();
+            // Remove validation classes
+            form.classList.remove('was-validated');
+            const inputs = form.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.classList.remove('is-valid', 'is-invalid');
+            });
+        }
+    }
 
     // Auto-hide toast messages
     setTimeout(function() {
