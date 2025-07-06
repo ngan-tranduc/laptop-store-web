@@ -125,7 +125,7 @@
                                                 ${user.fullName}
                                     </td>
                                     <td class="text-center">
-                                        <div class="btn-group" role="group">
+                                        <div class="action-buttons">
                                             <a href="/admin/user/${user.id}" class="btn btn-sm btn-soft-view" title="Xem chi tiết">
                                                 <i class="bi bi-eye"></i>
                                             </a>
@@ -139,92 +139,55 @@
                                     </td>
                                 </tr>
                             </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                        Xác nhận xóa
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="card-footer text-muted">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <small>Hiển thị ${users.size()} users</small>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <nav aria-label="User pagination">
-                                <ul class="pagination pagination-sm mb-0 justify-content-end">
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Previous</span>
-                                    </li>
-                                    <li class="page-item active">
-                                        <span class="page-link">1</span>
-                                    </li>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Next</span>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST" action="">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-1"></i>Xóa
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">
-                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-                    Xác nhận xóa
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa user này không? Hành động này không thể hoàn tác.
-            </div>
-            <div class="modal-footer">
-                <form id="deleteForm" method="POST" action="" style="display: inline;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-danger">
-                        <i class="bi bi-trash me-1"></i>
-                        Xóa
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function deleteUser(userId) {
+            document.getElementById('deleteForm').action = '/admin/user/delete/' + userId;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
 
-<script>
-    let userToDelete = null;
-
-    // Delete user function
-    function deleteUser(userId) {
-        userToDelete = userId;
-        // Update form action with user ID
-        document.getElementById('deleteForm').action = '/admin/user/delete/' + userId;
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        deleteModal.show();
-    }
-
-    // Add some interactive effects
-    document.addEventListener('DOMContentLoaded', function() {
         // Add hover effect to table rows
-        const tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            row.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = '#f8f9fa';
-            });
-            row.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '';
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
