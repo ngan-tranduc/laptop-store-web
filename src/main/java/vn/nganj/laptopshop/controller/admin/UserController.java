@@ -1,12 +1,9 @@
-package vn.nganj.laptopshop.controller;
+package vn.nganj.laptopshop.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import vn.nganj.laptopshop.domain.User;
-import vn.nganj.laptopshop.repository.UserRepository;
 import vn.nganj.laptopshop.service.UserService;
 
 import java.util.List;
@@ -30,7 +27,7 @@ public class UserController {
     }
 
     //table
-    @RequestMapping(value = "/admin/user")
+    @GetMapping("/admin/user")
     public String getUserPage(Model model){
         List<User> users = this.userService.getAllUser();
         model.addAttribute("users", users);

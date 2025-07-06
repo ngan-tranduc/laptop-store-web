@@ -19,7 +19,7 @@ public class User {
     private String avatar;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     Role role;
 
     @OneToMany(mappedBy = "user")
