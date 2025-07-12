@@ -1,6 +1,8 @@
 package vn.nganj.laptopshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
@@ -10,16 +12,27 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Email(message = "Email không hợp lệ", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
+
     private String password;
+
+    @Size(min = 3, max = 100, message = "Họ tên phải từ 3 ký tự trở lên")
     private String fullName;
+
+    @Size(max = 255, message = "Địa chỉ không được quá 255 ký tự")
     private String address;
+
+    @Pattern(regexp = "^[0-9+\\-\\s()]+$", message = "Số điện thoại không hợp lệ")
     private String phone;
 
     private String avatar;
 
+    @Valid
+    @NotNull(message = "Vui lòng chọn quyền cho người dùng")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     Role role;
 
     @OneToMany(mappedBy = "user")

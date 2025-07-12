@@ -1,12 +1,14 @@
 package vn.nganj.laptopshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+    @NotNull(message = "Vui lòng chọn quyền cho người dùng")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
