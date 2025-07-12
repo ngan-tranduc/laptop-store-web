@@ -23,7 +23,7 @@ public class Product {
     private String image;
 
     @NotBlank(message = "Mô tả chi tiết không được để trống")
-    @Size(max = 2000, message = "Mô tả chi tiết không được vượt quá 2000 ký tự")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
 
     @NotBlank(message = "Mô tả ngắn không được để trống")

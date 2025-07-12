@@ -7,6 +7,8 @@ import vn.nganj.laptopshop.repository.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ProductService {
@@ -30,5 +32,12 @@ public class ProductService {
 
     public void deleteById(long id) {
         productRepository.deleteById(id);
+    }
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    public List<Product> findByFactory(String apple) {
+        return productRepository.findByFactory(apple);
     }
 }

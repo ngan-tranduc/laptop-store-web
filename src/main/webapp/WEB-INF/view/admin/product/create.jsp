@@ -332,13 +332,8 @@
                                                     <option value="">-- Chọn nhà sản xuất --</option>
                                                     <option value="Apple">Apple</option>
                                                     <option value="Dell">Dell</option>
-                                                    <option value="HP">HP</option>
-                                                    <option value="Lenovo">Lenovo</option>
-                                                    <option value="Asus">Asus</option>
                                                     <option value="Acer">Acer</option>
                                                     <option value="MSI">MSI</option>
-                                                    <option value="Samsung">Samsung</option>
-                                                    <option value="LG">LG</option>
                                                 </form:select>
                                                     ${errorFactory}
                                             </div>

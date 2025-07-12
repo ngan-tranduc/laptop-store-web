@@ -364,13 +364,8 @@
                                                     <option value="">-- Chọn nhà sản xuất --</option>
                                                     <option value="Apple" ${currentProduct.factory == 'Apple' ? 'selected' : ''}>Apple</option>
                                                     <option value="Dell" ${currentProduct.factory == 'Dell' ? 'selected' : ''}>Dell</option>
-                                                    <option value="HP" ${currentProduct.factory == 'HP' ? 'selected' : ''}>HP</option>
-                                                    <option value="Lenovo" ${currentProduct.factory == 'Lenovo' ? 'selected' : ''}>Lenovo</option>
-                                                    <option value="Asus" ${currentProduct.factory == 'Asus' ? 'selected' : ''}>Asus</option>
                                                     <option value="Acer" ${currentProduct.factory == 'Acer' ? 'selected' : ''}>Acer</option>
                                                     <option value="MSI" ${currentProduct.factory == 'MSI' ? 'selected' : ''}>MSI</option>
-                                                    <option value="Samsung" ${currentProduct.factory == 'Samsung' ? 'selected' : ''}>Samsung</option>
-                                                    <option value="LG" ${currentProduct.factory == 'LG' ? 'selected' : ''}>LG</option>
                                                 </form:select>
                                                     ${errorFactory}
                                             </div>

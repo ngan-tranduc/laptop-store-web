@@ -56,6 +56,9 @@
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid #e9ecef;
+            /* Tối ưu hiệu suất loading ảnh */
+            transition: none;
+            background-color: #f8f9fa;
         }
 
         .product-name {
@@ -150,6 +153,62 @@
             justify-content: center;
             color: #9ca3af;
             font-size: 1.2rem;
+            border: 1px solid #e9ecef;
+        }
+
+        /* Tối ưu hiệu suất table */
+        .table {
+            table-layout: fixed;
+        }
+
+        .table td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table td:nth-child(3) {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Hiệu ứng loading skeleton */
+        .image-loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, transparent 37%, #f0f0f0 63%);
+            background-size: 400% 100%;
+            animation: skeleton-loading 1.5s ease infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0 50%;
+            }
+        }
+
+        /* Tối ưu pagination */
+        .pagination {
+            margin-bottom: 0;
+        }
+
+        .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+
+            .product-image,
+            .no-image-placeholder {
+                width: 40px;
+                height: 40px;
+            }
         }
     </style>
 </head>
@@ -187,20 +246,19 @@
                             <table class="table table-striped table-hover mb-0">
                                 <thead class="table-light">
                                 <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Hình ảnh</th>
-                                    <th scope="col">Tên sản phẩm</th>
-                                    <th scope="col">Giá</th>
-                                    <th scope="col">Số lượng</th>
-                                    <th scope="col">Nhà sản xuất</th>
-                                    <th scope="col">Đối tượng</th>
-                                    <th scope="col">Mô tả</th>
-                                    <th scope="col" class="text-center">Hành động</th>
+                                    <th scope="col" style="width: 5%;">ID</th>
+                                    <th scope="col" style="width: 8%;">Hình ảnh</th>
+                                    <th scope="col" style="width: 25%;">Tên sản phẩm</th>
+                                    <th scope="col" style="width: 12%;">Giá</th>
+                                    <th scope="col" style="width: 15%;">Số lượng</th>
+                                    <th scope="col" style="width: 12%;">Nhà sản xuất</th>
+                                    <th scope="col" style="width: 10%;">Đối tượng</th>
+                                    <th scope="col" style="width: 13%;" class="text-center">Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="product" items="${products}">
-                                    <tr>
+                                <c:forEach var="product" items="${products}" varStatus="status">
+                                    <tr data-product-id="${product.id}">
                                         <td class="align-middle">${product.id}</td>
                                         <td class="align-middle">
                                             <c:choose>
@@ -208,7 +266,11 @@
                                                     <img src="/images/product/${product.image}"
                                                          alt="${product.name}"
                                                          class="product-image"
-                                                         onerror="this.src='https://via.placeholder.com/150x150/f8f9fa/6c757d?text=No+Image';">
+                                                         loading="lazy"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                    <div class="no-image-placeholder" style="display: none;">
+                                                        <i class="bi bi-box-seam"></i>
+                                                    </div>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <div class="no-image-placeholder">
@@ -218,7 +280,7 @@
                                             </c:choose>
                                         </td>
                                         <td class="align-middle">
-                                            <a href="/admin/product/${product.id}" class="product-name">
+                                            <a href="/admin/product/${product.id}" class="product-name" title="${product.name}">
                                                     ${product.name}
                                             </a>
                                         </td>
@@ -247,24 +309,19 @@
                                             </div>
                                         </td>
                                         <td class="align-middle">
-                                            <span class="factory-badge">
+                                            <span class="factory-badge" title="${product.factory}">
                                                 <i class="bi bi-building me-1"></i>
                                                 ${product.factory}
                                             </span>
                                         </td>
                                         <td class="align-middle">
-                                            <span class="target-badge">
+                                            <span class="target-badge" title="${product.target}">
                                                 <i class="bi bi-people me-1"></i>
                                                 ${product.target}
                                             </span>
                                         </td>
-                                        <td class="align-middle">
-                                            <div class="description-preview" title="${product.shortDesc}">
-                                                    ${product.shortDesc}
-                                            </div>
-                                        </td>
                                         <td class="text-center align-middle">
-                                            <div class="action-buttons">
+                                            <div class="btn-group" role="group">
                                                 <a href="/admin/product/${product.id}"
                                                    class="btn btn-sm btn-soft-view"
                                                    title="Xem chi tiết">
@@ -295,29 +352,97 @@
                 <c:if test="${totalPages > 1}">
                     <nav aria-label="Page navigation" class="mt-4">
                         <ul class="pagination justify-content-center">
+                            <!-- Previous page -->
                             <c:if test="${currentPage > 1}">
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/product?page=${currentPage - 1}">
+                                    <a class="page-link" href="/admin/product?page=${currentPage - 1}" aria-label="Previous">
                                         <i class="bi bi-chevron-left"></i>
                                     </a>
                                 </li>
                             </c:if>
 
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                    <a class="page-link" href="/admin/product?page=${i}">${i}</a>
-                                </li>
-                            </c:forEach>
+                            <!-- Page numbers with smart pagination -->
+                            <c:choose>
+                                <c:when test="${totalPages <= 7}">
+                                    <!-- Show all pages if total is 7 or less -->
+                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                        <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                            <a class="page-link" href="/admin/product?page=${i}">${i}</a>
+                                        </li>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <!-- Smart pagination for more than 7 pages -->
+                                    <c:choose>
+                                        <c:when test="${currentPage <= 4}">
+                                            <!-- Show first 5 pages, then ... and last page -->
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link" href="/admin/product?page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="/admin/product?page=${totalPages}">${totalPages}</a>
+                                            </li>
+                                        </c:when>
+                                        <c:when test="${currentPage >= totalPages - 3}">
+                                            <!-- Show first page, then ... and last 5 pages -->
+                                            <li class="page-item">
+                                                <a class="page-link" href="/admin/product?page=1">1</a>
+                                            </li>
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                            <c:forEach var="i" begin="${totalPages - 4}" end="${totalPages}">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link" href="/admin/product?page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <!-- Show first page, current page with neighbors, and last page -->
+                                            <li class="page-item">
+                                                <a class="page-link" href="/admin/product?page=1">1</a>
+                                            </li>
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                            <c:forEach var="i" begin="${currentPage - 2}" end="${currentPage + 2}">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link" href="/admin/product?page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="/admin/product?page=${totalPages}">${totalPages}</a>
+                                            </li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:otherwise>
+                            </c:choose>
 
+                            <!-- Next page -->
                             <c:if test="${currentPage < totalPages}">
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/product?page=${currentPage + 1}">
+                                    <a class="page-link" href="/admin/product?page=${currentPage + 1}" aria-label="Next">
                                         <i class="bi bi-chevron-right"></i>
                                     </a>
                                 </li>
                             </c:if>
                         </ul>
                     </nav>
+
+                    <!-- Pagination info -->
+                    <div class="d-flex justify-content-center mt-2">
+                        <small class="text-muted">
+                            Trang ${currentPage} / ${totalPages}
+                        </small>
+                    </div>
                 </c:if>
             </div>
         </main>
@@ -366,26 +491,80 @@
         deleteModal.show();
     }
 
-    // Add hover effect to table rows
+    // Tối ưu hiệu suất với lazy loading và debouncing
     document.addEventListener('DOMContentLoaded', function() {
+        // Lazy loading cho ảnh
+        const images = document.querySelectorAll('.product-image');
+
+        // Intersection Observer cho lazy loading
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        // Ảnh đã được load với loading="lazy", chỉ cần observe
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            images.forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Debounced hover effect cho table rows
+        let hoverTimeout;
         const tableRows = document.querySelectorAll('tbody tr');
+
         tableRows.forEach(row => {
             row.addEventListener('mouseenter', function() {
+                clearTimeout(hoverTimeout);
                 this.style.backgroundColor = '#f8f9fa';
             });
+
             row.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '';
+                const currentRow = this;
+                hoverTimeout = setTimeout(() => {
+                    currentRow.style.backgroundColor = '';
+                }, 50);
             });
         });
 
-        // Add tooltip for long descriptions
-        const descriptions = document.querySelectorAll('.description-preview');
-        descriptions.forEach(desc => {
-            if (desc.scrollWidth > desc.clientWidth) {
-                desc.style.cursor = 'help';
+        // Preload next page cho smooth navigation
+        const nextPageLink = document.querySelector('.pagination .page-item:last-child a');
+        if (nextPageLink) {
+            const prefetchLink = document.createElement('link');
+            prefetchLink.rel = 'prefetch';
+            prefetchLink.href = nextPageLink.href;
+            document.head.appendChild(prefetchLink);
+        }
+
+        // Keyboard navigation cho pagination
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey) {
+                const currentPage = parseInt('${currentPage}');
+                const totalPages = parseInt('${totalPages}');
+
+                if (e.key === 'ArrowLeft' && currentPage > 1) {
+                    window.location.href = '/admin/product?page=' + (currentPage - 1);
+                } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
+                    window.location.href = '/admin/product?page=' + (currentPage + 1);
+                }
             }
         });
     });
+
+    // Service Worker cho cache tĩnh (optional)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                console.log('SW registered: ', registration);
+            }).catch(function(registrationError) {
+                console.log('SW registration failed: ', registrationError);
+            });
+        });
+    }
 </script>
 </body>
 </html>

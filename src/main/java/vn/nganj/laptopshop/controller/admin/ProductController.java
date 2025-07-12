@@ -13,6 +13,10 @@ import vn.nganj.laptopshop.service.ProductService;
 import vn.nganj.laptopshop.service.UploadService;
 import vn.nganj.laptopshop.service.UserService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +32,20 @@ public class ProductController {
 
     //show
     @GetMapping("/admin/product")
-    public String showAllProducts(Model model) {
-        List<Product> products = productService.findAll();
-        model.addAttribute("products", products);
+    public String getProducts(
+            @RequestParam(defaultValue = "1") int page,
+            Model model) {
+
+        int pageSize = 20;
+
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<Product> productsPage = productService.findAll(pageable);
+
+        model.addAttribute("products", productsPage.getContent());
+        model.addAttribute("currentPage", page); // Trang hiện tại (1-based)
+        model.addAttribute("totalPages", productsPage.getTotalPages());
+        model.addAttribute("totalItems", productsPage.getTotalElements());
+
         return "admin/product/show";
     }
 
