@@ -1,11 +1,13 @@
 package vn.nganj.laptopshop.controller.admin;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.nganj.laptopshop.domain.User;
 import vn.nganj.laptopshop.service.RoleService;
 import vn.nganj.laptopshop.service.UploadService;
@@ -27,14 +29,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping("/")
-    public String handleHello(Model model){
-        List<User> arrUsers = this.userService.getAllUser();
-//        System.out.printf(arrUsers.toString());
-        model.addAttribute("nganj", "hi");
-        return "hello";
-    }
-
     //show
     @GetMapping("/admin/user")
     public String getUserPage(Model model){
@@ -52,17 +46,29 @@ public class UserController {
     }
 
     //create
-    @RequestMapping(value = "/admin/user/create")
-    public String getCreatePage(Model model){
+    @GetMapping("/admin/user/create")
+    public String getCreatePage(Model model) {
         model.addAttribute("newUser", new User());
         model.addAttribute("roles", roleService.findAll());
         return "admin/user/create";
     }
-    @RequestMapping(value = "/admin/user/create", method = {RequestMethod.POST})
-    public String createUserPage(Model model, @ModelAttribute("newUser") User user, @RequestParam("avatarFile") MultipartFile file){
-        String avatar = this.uploadService.handleUploadFile(file, "avatar");
+
+    @PostMapping("/admin/user/create")
+    public String createUserPage(Model model,
+                                 @ModelAttribute("newUser") @Valid User user,
+                                 BindingResult bindingResult,
+                                 @RequestParam("avatarFile") MultipartFile file,
+                                 RedirectAttributes redirectAttributes) {
+        model.addAttribute("roles", roleService.findAll());
+        // Kiểm tra validation errors
+        if (bindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
+        if (!file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().trim().isEmpty()) {
+            String avatar = this.uploadService.handleUploadFile(file, "avatar");
+            user.setAvatar(avatar);
+        }
         String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setAvatar(avatar);
         user.setPassword(hashedPassword);
         this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
@@ -70,12 +76,17 @@ public class UserController {
 
     //update
     @PostMapping("/admin/user/edit")
-    public String postUpdateUser(@ModelAttribute("currentUser") User user) {
+    public String postUpdateUser(@ModelAttribute("currentUser") User user, @RequestParam("avatarFile") MultipartFile file) {
         User currentUser = this.userService.getUserById(user.getId());
         if(currentUser != null){
             currentUser.setFullName(user.getFullName());
             currentUser.setPhone(user.getPhone());
             currentUser.setAddress(user.getAddress());
+            currentUser.setRole(user.getRole());
+            if (!file.isEmpty() && file.getOriginalFilename() != null && !file.getOriginalFilename().trim().isEmpty()) {
+                String avatar = this.uploadService.handleUploadFile(file, "avatar");
+                currentUser.setAvatar(avatar);
+            }
             this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
@@ -84,6 +95,7 @@ public class UserController {
     public String getUserEditPage(Model model, @PathVariable long id){
         User user = this.userService.getUserById(id);
         model.addAttribute("currentUser", user);
+        model.addAttribute("roles", roleService.findAll());
         return "admin/user/edit";
     }
 

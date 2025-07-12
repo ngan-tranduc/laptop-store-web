@@ -42,12 +42,143 @@
             color: #dc3545;
         }
         .readonly-field {
-            background-color: #f8f9fa;
-            border-color: #dee2e6;
+            background-color: #f8f9fa !important;
+            border-color: #dee2e6 !important;
         }
         .toast {
             min-width: 350px;
         }
+
+        /* Avatar Upload Styles */
+        .avatar-upload {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #764ba2; /* hoặc gradient */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .avatar-preview:hover {
+            border-color: #0d6efd;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            border: 3px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-preview img[src=""] {
+            display: none;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #0d6efd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-edit:hover {
+            background: #0b5ed7;
+            transform: scale(1.1);
+        }
+
+        .avatar-edit input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .avatar-edit i {
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .avatar-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .avatar-upload:hover .avatar-upload-overlay {
+            opacity: 1;
+        }
+
+        .avatar-info {
+            margin-top: 0.5rem;
+        }
+
+        .id-display {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+
+        /* Avatar color classes */
+        .avatar-color-0 { background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); }
+        .avatar-color-1 { background: linear-gradient(135deg, #198754 0%, #157347 100%); }
+        .avatar-color-2 { background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); }
+        .avatar-color-3 { background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%); color: #212529 !important; }
+        .avatar-color-4 { background: linear-gradient(135deg, #0dcaf0 0%, #3dd5f3 100%); color: #212529 !important; }
+        .avatar-color-5 { background: linear-gradient(135deg, #6c757d 0%, #5c636a 100%); }
+        .avatar-color-6 { background: linear-gradient(135deg, #212529 0%, #000 100%); }
+        .avatar-color-7 { background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); }
     </style>
 </head>
 
@@ -63,7 +194,7 @@
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="/admin/user">Người Dùng</a></li>
-                    <li class="breadcrumb-item active">Chỉnh Sửa</li>
+                    <li class="breadcrumb-item active">Chỉnh Sửa #${currentUser.id}</li>
                 </ol>
 
                 <!-- Header -->
@@ -79,9 +210,38 @@
                     </div>
                 </div>
 
+                <!-- Avatar Color Helper Functions -->
+                <c:set var="colorIndex" value="${currentUser.id % 8}" />
+                <c:choose>
+                    <c:when test="${colorIndex == 0}">
+                        <c:set var="avatarColorClass" value="avatar-color-0" />
+                    </c:when>
+                    <c:when test="${colorIndex == 1}">
+                        <c:set var="avatarColorClass" value="avatar-color-1" />
+                    </c:when>
+                    <c:when test="${colorIndex == 2}">
+                        <c:set var="avatarColorClass" value="avatar-color-2" />
+                    </c:when>
+                    <c:when test="${colorIndex == 3}">
+                        <c:set var="avatarColorClass" value="avatar-color-3" />
+                    </c:when>
+                    <c:when test="${colorIndex == 4}">
+                        <c:set var="avatarColorClass" value="avatar-color-4" />
+                    </c:when>
+                    <c:when test="${colorIndex == 5}">
+                        <c:set var="avatarColorClass" value="avatar-color-5" />
+                    </c:when>
+                    <c:when test="${colorIndex == 6}">
+                        <c:set var="avatarColorClass" value="avatar-color-6" />
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="avatarColorClass" value="avatar-color-7" />
+                    </c:otherwise>
+                </c:choose>
+
                 <!-- User Edit Form Card -->
                 <div class="row justify-content-center">
-                    <div class="col-lg-8 col-md-10">
+                    <div class="col-lg-9 col-md-10">
                         <div class="card detail-card">
                             <!-- Card Header -->
                             <div class="card-header bg-white py-3 border-bottom">
@@ -93,9 +253,68 @@
                                 <form:form method="post"
                                            action="/admin/user/edit"
                                            modelAttribute="currentUser"
-                                           id="userEditForm">
+                                           id="editUserForm"
+                                           enctype="multipart/form-data">
+
                                     <!-- Hidden field cho ID -->
                                     <form:input type="hidden" path="id" />
+
+                                    <!-- Avatar Upload -->
+                                    <div class="info-item">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="info-label">Ảnh Đại Diện</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="avatar-upload">
+                                                    <div class="avatar-preview" onclick="document.getElementById('avatarFile').click()">
+                                                        <c:choose>
+                                                            <c:when test="${not empty currentUser.avatar}">
+                                                                <img src="/images/avatar/${currentUser.avatar}"
+                                                                     alt="Avatar của ${currentUser.fullName}"
+                                                                     class="avatar-img"
+                                                                     id="avatarImage"
+                                                                     onerror="handleImageError(this)">
+                                                                <div class="avatar-placeholder ${avatarColorClass}" id="avatarPlaceholder" style="display: none;">
+                                                                    <c:choose>
+                                                                        <c:when test="${not empty currentUser.fullName}">
+                                                                            ${currentUser.fullName.substring(0,1).toUpperCase()}${currentUser.fullName.indexOf(' ') > 0 ? currentUser.fullName.substring(currentUser.fullName.indexOf(' ') + 1, currentUser.fullName.indexOf(' ') + 2).toUpperCase() : ''}
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            ${currentUser.email.substring(0,1).toUpperCase()}
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </div>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <div class="avatar-placeholder ${avatarColorClass}" id="avatarPlaceholder">
+                                                                    <c:choose>
+                                                                        <c:when test="${not empty currentUser.fullName}">
+                                                                            ${currentUser.fullName.substring(0,1).toUpperCase()}${currentUser.fullName.indexOf(' ') > 0 ? currentUser.fullName.substring(currentUser.fullName.indexOf(' ') + 1, currentUser.fullName.indexOf(' ') + 2).toUpperCase() : ''}
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            ${currentUser.email.substring(0,1).toUpperCase()}
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </div>
+                                                                <img class="avatar-img" id="avatarImage" src="" style="display: none;">
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </div>
+                                                    <div class="avatar-edit">
+                                                        <input type="file" id="avatarFile" name="avatarFile" accept=".jpg,.jpeg,.png,.gif" onchange="previewAvatar(this)" />
+                                                        <i class="fas fa-camera"></i>
+                                                    </div>
+                                                    <div class="avatar-upload-overlay" onclick="document.getElementById('avatarFile').click()">
+                                                        <i class="fas fa-camera"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="avatar-info">
+                                                    <small class="text-muted">Nhấp vào ảnh để thay đổi. Chấp nhận: JPG, PNG, GIF (tối đa 5MB)</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- User ID (Read-only) -->
                                     <div class="info-item">
@@ -104,9 +323,7 @@
                                                 <label class="info-label">ID</label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <div class="form-control readonly-field" style="border: none; background-color: transparent; padding: 0;">
-                                                        ${currentUser.id}
-                                                </div>
+                                                <div class="id-display">${currentUser.id}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -115,17 +332,17 @@
                                     <div class="info-item">
                                         <div class="row">
                                             <div class="col-sm-3">
-                                                <label class="info-label">Họ và Tên</label>
+                                                <label class="info-label required">Họ và Tên</label>
                                             </div>
                                             <div class="col-sm-9">
+                                                <c:set var="errorFullName">
+                                                    <form:errors path="fullName" cssClass="invalid-feedback"/>
+                                                </c:set>
                                                 <form:input type="text"
-                                                            class="form-control"
+                                                            class="form-control ${not empty errorFullName? 'is-invalid':''}"
                                                             path="fullName"
-                                                            placeholder="Nhập họ và tên đầy đủ"
-                                                            required="true" />
-                                                <div class="invalid-feedback">
-                                                    Họ và tên quá ngắn.
-                                                </div>
+                                                />
+                                                    ${errorFullName}
                                             </div>
                                         </div>
                                     </div>
@@ -146,21 +363,34 @@
                                         </div>
                                     </div>
 
-                                    <!-- Phone -->
+                                    <!-- Phone and Role on same row -->
                                     <div class="info-item">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="info-label">Số Điện Thoại</label>
                                             </div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-4">
+                                                <c:set var="errorPhone">
+                                                    <form:errors path="phone" cssClass="invalid-feedback"/>
+                                                </c:set>
                                                 <form:input type="tel"
-                                                            class="form-control"
+                                                            class="form-control ${not empty errorPhone? 'is-invalid':''}"
                                                             path="phone"
-                                                            placeholder="Nhập số điện thoại"
-                                                            required="true" />
-                                                <div class="invalid-feedback">
-                                                    Vui lòng nhập số điện thoại hợp lệ.
-                                                </div>
+                                                />
+                                                    ${errorPhone}
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <label class="info-label required">Vai Trò</label>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <c:set var="errorRole">
+                                                    <form:errors path="role.id" cssClass="invalid-feedback"/>
+                                                </c:set>
+                                                <form:select path="role.id" class="form-select ${not empty errorRole? 'is-invalid':''}">
+                                                    <form:option value="">-- Chọn vai trò --</form:option>
+                                                    <form:options items="${roles}" itemValue="id" itemLabel="name"/>
+                                                </form:select>
+                                                    ${errorRole}
                                             </div>
                                         </div>
                                     </div>
@@ -172,14 +402,14 @@
                                                 <label class="info-label">Địa Chỉ</label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <form:textarea class="form-control"
+                                                <c:set var="errorAddress">
+                                                    <form:errors path="address" cssClass="invalid-feedback"/>
+                                                </c:set>
+                                                <form:textarea class="form-control ${not empty errorAddress? 'is-invalid':''}"
                                                                path="address"
                                                                rows="3"
-                                                               placeholder="Nhập địa chỉ đầy đủ"
-                                                               required="true" />
-                                                <div class="invalid-feedback">
-                                                    Địa chỉ quá ngắn.
-                                                </div>
+                                                />
+                                                    ${errorAddress}
                                             </div>
                                         </div>
                                     </div>
@@ -196,11 +426,15 @@
 
                                     <!-- Submit buttons inside form -->
                                     <div class="info-item">
-                                        <div class="d-flex gap-2">
+                                        <div class="d-flex gap-2 justify-content-end">
                                             <button type="button" class="btn btn-outline-warning" onclick="resetForm()">
-                                                <i class="fas fa-undo me-1"></i>
-                                                Hoàn tác
+                                                <i class="fas fa-redo me-1"></i>
+                                                Đặt lại
                                             </button>
+                                            <a href="/admin/user" class="btn btn-outline-danger">
+                                                <i class="fas fa-times me-1"></i>
+                                                Hủy bỏ
+                                            </a>
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-save me-1"></i>
                                                 Cập nhật
@@ -249,54 +483,82 @@
     </div>
 </c:if>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="/js/scripts.js"></script>
-
+<!-- Avatar Upload Script -->
 <script>
-    // Simple form validation without conflicts
-    document.getElementById('userEditForm').addEventListener('submit', function(e) {
-        const fullName = document.querySelector('input[name="fullName"]').value;
-        const address = document.querySelector('textarea[name="address"]').value;
-        const phone = document.querySelector('input[name="phone"]').value;
+    function previewAvatar(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
 
-        let isValid = true;
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Kích thước file quá lớn. Vui lòng chọn file nhỏ hơn 5MB.');
+                input.value = '';
+                return;
+            }
 
-        // Reset previous validation
-        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Định dạng file không được hỗ trợ. Vui lòng chọn file JPG, PNG hoặc GIF.');
+                input.value = '';
+                return;
+            }
 
-        // Validate full name
-        if (fullName.trim().length < 2) {
-            document.querySelector('input[name="fullName"]').classList.add('is-invalid');
-            isValid = false;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const avatarImage = document.getElementById('avatarImage');
+                const placeholder = document.getElementById('avatarPlaceholder');
+
+                if (avatarImage) {
+                    avatarImage.src = e.target.result;
+                    avatarImage.style.display = 'block';
+                }
+
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            };
+            reader.readAsDataURL(file);
         }
+    }
 
-        // Validate address
-        if (address.trim().length < 5) {
-            document.querySelector('textarea[name="address"]').classList.add('is-invalid');
-            isValid = false;
+    function handleImageError(img) {
+        img.style.display = 'none';
+        const placeholder = document.getElementById('avatarPlaceholder');
+        if (placeholder) {
+            placeholder.style.display = 'flex';
         }
+    }
 
-        // Validate phone
-        const phoneRegex = /^[0-9]{10,11}$/;
-        if (!phoneRegex.test(phone)) {
-            document.querySelector('input[name="phone"]').classList.add('is-invalid');
-            isValid = false;
-        }
-
-        if (!isValid) {
-            e.preventDefault();
-        }
-    });
-
-    // Phone number only digits
-    document.querySelector('input[name="phone"]').addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    });
-
-    // Reset form function
     function resetForm() {
-        document.getElementById('userEditForm').reset();
+        // Reset form fields
+        document.getElementById('editUserForm').reset();
+
+        // Reset validation classes
         document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+        // Reset avatar preview
+        const avatarImage = document.getElementById('avatarImage');
+        const placeholder = document.getElementById('avatarPlaceholder');
+        const originalAvatar = '${currentUser.avatar}';
+
+        if (originalAvatar && originalAvatar.trim() !== '') {
+            if (avatarImage) {
+                avatarImage.src = '/images/avatar/' + originalAvatar;
+                avatarImage.style.display = 'block';
+            }
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+        } else {
+            if (avatarImage) {
+                avatarImage.src = '';
+                avatarImage.style.display = 'none';
+            }
+            if (placeholder) {
+                placeholder.style.display = 'flex';
+            }
+        }
     }
 
     // Auto-hide toasts
@@ -309,5 +571,8 @@
         });
     }, 5000);
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/js/scripts.js"></script>
 </body>
 </html>

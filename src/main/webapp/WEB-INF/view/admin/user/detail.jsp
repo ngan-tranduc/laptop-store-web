@@ -38,6 +38,56 @@
         .info-item:last-child {
             border-bottom: none;
         }
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+        .avatar-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            border: 3px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .role-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .role-admin {
+            background-color: #dc3545;
+            color: white;
+        }
+        .role-user {
+            background-color: #28a745;
+            color: white;
+        }
+        .role-moderator {
+            background-color: #fd7e14;
+            color: white;
+        }
+        .role-default {
+            background-color: #6c757d;
+            color: white;
+        }
     </style>
 </head>
 
@@ -71,7 +121,7 @@
 
                 <!-- User Detail Card -->
                 <div class="row justify-content-center">
-                    <div class="col-lg-8 col-md-10">
+                    <div class="col-lg-9 col-md-10">
                         <div class="card detail-card">
                             <!-- Card Header -->
                             <div class="card-header bg-white py-3 border-bottom">
@@ -80,6 +130,49 @@
 
                             <!-- Card Body -->
                             <div class="card-body p-0">
+                                <!-- Avatar -->
+                                <div class="info-item">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="info-label">Ảnh Đại Diện</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="avatar-container">
+                                                <c:choose>
+                                                    <c:when test="${not empty user.avatar}">
+                                                        <img src="/images/avatar/${user.avatar}"
+                                                             alt="Avatar của ${user.fullName}"
+                                                             class="avatar-img"
+                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                        <div class="avatar-placeholder" style="display: none;">
+                                                            <c:choose>
+                                                                <c:when test="${not empty user.fullName}">
+                                                                    ${user.fullName.substring(0,1).toUpperCase()}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <i class="fas fa-user"></i>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div class="avatar-placeholder">
+                                                            <c:choose>
+                                                                <c:when test="${not empty user.fullName}">
+                                                                    ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    ${user.email.substring(0,1).toUpperCase()}
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- User ID -->
                                 <div class="info-item">
                                     <div class="row">
@@ -149,11 +242,55 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Role -->
+                                <div class="info-item">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label class="info-label">Vai Trò</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <c:choose>
+                                                <c:when test="${not empty user.role}">
+                                                    <c:choose>
+                                                        <c:when test="${user.role.name == 'ADMIN' || user.role.name == 'admin'}">
+                                                            <c:set var="roleClass" value="role-admin" />
+                                                            <c:set var="roleIcon" value="bi-shield-check" />
+                                                        </c:when>
+                                                        <c:when test="${user.role.name == 'USER' || user.role.name == 'user'}">
+                                                            <c:set var="roleClass" value="role-user" />
+                                                            <c:set var="roleIcon" value="bi-person" />
+                                                        </c:when>
+                                                        <c:when test="${user.role.name == 'MODERATOR' || user.role.name == 'moderator'}">
+                                                            <c:set var="roleClass" value="role-moderator" />
+                                                            <c:set var="roleIcon" value="bi-person-gear" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:set var="roleClass" value="role-default" />
+                                                            <c:set var="roleIcon" value="bi-question-circle" />
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <span class="role-badge ${roleClass}">
+                        <i class="bi ${roleIcon} me-1"></i>
+                        ${user.role.name}
+                    </span>
+                                                </c:when>
+                                                <c:otherwise>
+                    <span class="role-badge role-default">
+                        <i class="bi bi-question-circle me-1"></i>
+                        Chưa xác định
+                    </span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <!-- Card Footer -->
                             <div class="card-footer bg-light">
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 justify-content-end">
                                     <a href="/admin/user/edit/${user.id}" class="btn btn-primary">
                                         <i class="fas fa-edit me-2"></i>
                                         Chỉnh Sửa
@@ -167,69 +304,62 @@
                         </div>
                     </div>
                 </div>
-
-
-                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">
-                                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-                                    Xác nhận xóa
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.
-                            </div>
-                            <div class="modal-footer">
-                                <form id="deleteForm" method="POST" action="">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="bi bi-trash me-1"></i>Xóa
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Delete Confirmation Modal -->
-<%--                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">--%>
-<%--                    <div class="modal-dialog">--%>
-<%--                        <div class="modal-content">--%>
-<%--                            <div class="modal-header bg-danger text-white">--%>
-<%--                                <h5 class="modal-title" id="deleteModalLabel">--%>
-<%--                                    <i class="fas fa-exclamation-triangle me-2"></i>--%>
-<%--                                    Xác Nhận Xóa--%>
-<%--                                </h5>--%>
-<%--                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>--%>
-<%--                            </div>--%>
-<%--                            <div class="modal-body">--%>
-<%--                                <p>Bạn có chắc chắn muốn xóa người dùng <strong>${user.fullName}</strong> không?</p>--%>
-<%--                                <p class="text-muted mb-0">Hành động này không thể hoàn tác!</p>--%>
-<%--                            </div>--%>
-<%--                            <div class="modal-footer">--%>
-<%--                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>--%>
-<%--                                <form action="/admin/user/delete/${user.id}" method="post" class="d-inline">--%>
-<%--                                    <button type="submit" class="btn btn-danger">--%>
-<%--                                        <i class="fas fa-trash me-2"></i>--%>
-<%--                                        Xóa--%>
-<%--                                    </button>--%>
-<%--                                </form>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
             </div>
         </main>
         <jsp:include page="../layout/footer.jsp"/>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                    Xác nhận xóa
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="POST" action="">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger" onclick="deleteUser(${user.id})">
+                        <i class="bi bi-trash me-1"></i>Xóa
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/scripts.js"></script>
+
+<script>
+    function deleteUser(userId) {
+        document.getElementById('deleteForm').action = '/admin/user/delete/' + userId;
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+
+    // Add hover effect to table rows
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+    });
+</script>
 </body>
 
 </html>
