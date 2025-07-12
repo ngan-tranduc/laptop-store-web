@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="author" content="Nganj"/>
-    <title>Tạo Sản Phẩm Mới - Admin</title>
+    <title>Chỉnh Sửa Sản Phẩm - Admin</title>
     <link href="/css/styles.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -182,6 +182,12 @@
         .price-input {
             max-width: 250px;
         }
+
+        .current-image-info {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 
@@ -193,42 +199,51 @@
         <main>
             <div class="container-fluid px-4">
                 <!-- Breadcrumb -->
-                <h1 class="mt-4">Tạo Sản Phẩm Mới</h1>
+                <h1 class="mt-4">Chỉnh Sửa Sản Phẩm</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="/admin/product">Sản Phẩm</a></li>
-                    <li class="breadcrumb-item active">Tạo Mới</li>
+                    <li class="breadcrumb-item active">Chỉnh Sửa</li>
                 </ol>
 
                 <!-- Header -->
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="d-flex align-items-center justify-content-between">
-                            <h2 class="mb-0 text-dark"></h2>
-                            <a href="/admin/product" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>
-                                Quay lại
-                            </a>
+                            <h2 class="mb-0 text-dark">ID: ${currentProduct.id}</h2>
+                            <div class="d-flex gap-2">
+                                <a href="/admin/product/${currentProduct.id}" class="btn btn-outline-info">
+                                    <i class="fas fa-eye me-2"></i>
+                                    Xem chi tiết
+                                </a>
+                                <a href="/admin/product" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Quay lại
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product Create Form Card -->
+                <!-- Product Edit Form Card -->
                 <div class="row justify-content-center">
                     <div class="col-lg-10 col-md-11">
                         <div class="card detail-card">
                             <!-- Card Header -->
                             <div class="card-header bg-white py-3 border-bottom">
-                                <h5 class="mb-0 text-dark">Tạo Sản Phẩm Mới</h5>
+                                <h5 class="mb-0 text-dark">Chỉnh Sửa Sản Phẩm: ${currentProduct.name}</h5>
                             </div>
 
                             <!-- Card Body -->
                             <div class="card-body p-0">
                                 <form:form method="post"
-                                           action="/admin/product/create"
-                                           modelAttribute="newProduct"
-                                           id="createProductForm"
+                                           action="/admin/product/edit"
+                                           modelAttribute="currentProduct"
+                                           id="editProductForm"
                                            enctype="multipart/form-data">
+
+                                    <!-- Hidden ID field -->
+                                    <form:hidden path="id" />
 
                                     <!-- Product Image -->
                                     <div class="info-item">
@@ -238,8 +253,18 @@
                                             </div>
                                             <div class="col-sm-9">
                                                 <div class="product-image-upload">
-                                                    <div class="product-image-preview" id="imagePreview" onclick="document.getElementById('imageFile').click()">
-                                                        <img id="productImage" alt="Product Preview" style="display: none;" />
+                                                    <div class="product-image-preview ${not empty currentProduct.image ? 'has-image' : ''}"
+                                                         id="imagePreview"
+                                                         onclick="document.getElementById('imageFile').click()">
+                                                        <c:if test="${not empty currentProduct.image}">
+                                                            <img id="productImage"
+                                                                 src="/images/product/${currentProduct.image}"
+                                                                 alt="Current Product Image"
+                                                                 style="display: block;" />
+                                                        </c:if>
+                                                        <c:if test="${empty currentProduct.image}">
+                                                            <img id="productImage" alt="Product Preview" style="display: none;" />
+                                                        </c:if>
                                                         <div class="placeholder" id="imagePlaceholder">
                                                             <i class="fas fa-image"></i>
                                                             <div class="placeholder-text">Nhấp để chọn ảnh</div>
@@ -253,6 +278,12 @@
                                                         <i class="fas fa-camera"></i>
                                                     </div>
                                                 </div>
+                                                <c:if test="${not empty currentProduct.image}">
+                                                    <div class="current-image-info">
+                                                        <i class="fas fa-info-circle me-1"></i>
+                                                        Ảnh hiện tại: ${currentProduct.image}
+                                                    </div>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -319,6 +350,7 @@
                                     </div>
 
                                     <!-- Factory and Target -->
+                                    <!-- Factory and Target -->
                                     <div class="info-item">
                                         <div class="row">
                                             <div class="col-sm-3">
@@ -330,15 +362,15 @@
                                                 </c:set>
                                                 <form:select path="factory" class="form-select ${not empty errorFactory? 'is-invalid':''}">
                                                     <option value="">-- Chọn nhà sản xuất --</option>
-                                                    <option value="Apple">Apple</option>
-                                                    <option value="Dell">Dell</option>
-                                                    <option value="HP">HP</option>
-                                                    <option value="Lenovo">Lenovo</option>
-                                                    <option value="Asus">Asus</option>
-                                                    <option value="Acer">Acer</option>
-                                                    <option value="MSI">MSI</option>
-                                                    <option value="Samsung">Samsung</option>
-                                                    <option value="LG">LG</option>
+                                                    <option value="Apple" ${currentProduct.factory == 'Apple' ? 'selected' : ''}>Apple</option>
+                                                    <option value="Dell" ${currentProduct.factory == 'Dell' ? 'selected' : ''}>Dell</option>
+                                                    <option value="HP" ${currentProduct.factory == 'HP' ? 'selected' : ''}>HP</option>
+                                                    <option value="Lenovo" ${currentProduct.factory == 'Lenovo' ? 'selected' : ''}>Lenovo</option>
+                                                    <option value="Asus" ${currentProduct.factory == 'Asus' ? 'selected' : ''}>Asus</option>
+                                                    <option value="Acer" ${currentProduct.factory == 'Acer' ? 'selected' : ''}>Acer</option>
+                                                    <option value="MSI" ${currentProduct.factory == 'MSI' ? 'selected' : ''}>MSI</option>
+                                                    <option value="Samsung" ${currentProduct.factory == 'Samsung' ? 'selected' : ''}>Samsung</option>
+                                                    <option value="LG" ${currentProduct.factory == 'LG' ? 'selected' : ''}>LG</option>
                                                 </form:select>
                                                     ${errorFactory}
                                             </div>
@@ -351,12 +383,12 @@
                                                 </c:set>
                                                 <form:select path="target" class="form-select ${not empty errorTarget? 'is-invalid':''}">
                                                     <option value="">-- Chọn mục đích --</option>
-                                                    <option value="Gaming">Gaming</option>
-                                                    <option value="Văn phòng">Văn phòng</option>
-                                                    <option value="Đồ họa">Đồ họa</option>
-                                                    <option value="Sinh viên">Sinh viên</option>
-                                                    <option value="Doanh nhân">Doanh nhân</option>
-                                                    <option value="Đa năng">Đa năng</option>
+                                                    <option value="Gaming" ${currentProduct.target == 'Gaming' ? 'selected' : ''}>Gaming</option>
+                                                    <option value="Văn phòng" ${currentProduct.target == 'Văn phòng' ? 'selected' : ''}>Văn phòng</option>
+                                                    <option value="Đồ họa" ${currentProduct.target == 'Đồ họa' ? 'selected' : ''}>Đồ họa</option>
+                                                    <option value="Sinh viên" ${currentProduct.target == 'Sinh viên' ? 'selected' : ''}>Sinh viên</option>
+                                                    <option value="Doanh nhân" ${currentProduct.target == 'Doanh nhân' ? 'selected' : ''}>Doanh nhân</option>
+                                                    <option value="Đa năng" ${currentProduct.target == 'Đa năng' ? 'selected' : ''}>Đa năng</option>
                                                 </form:select>
                                                     ${errorTarget}
                                             </div>
@@ -405,23 +437,23 @@
                                         </div>
                                     </div>
 
-                                    <!-- Sold (Hidden field, set to 0 by default) -->
-                                    <form:hidden path="sold" value="0" />
+                                    <!-- Sold (Keep the current value) -->
+                                    <form:hidden path="sold" />
 
                                     <!-- Submit buttons -->
                                     <div class="info-item">
                                         <div class="d-flex gap-2 justify-content-end">
-                                            <button type="reset" class="btn btn-outline-warning" onclick="resetForm()">
+                                            <button type="button" class="btn btn-outline-warning" onclick="resetForm()">
                                                 <i class="fas fa-redo me-1"></i>
-                                                Đặt lại
+                                                Khôi phục
                                             </button>
                                             <a href="/admin/product" class="btn btn-outline-danger">
                                                 <i class="fas fa-times me-1"></i>
                                                 Hủy bỏ
                                             </a>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-check me-1"></i>
-                                                Tạo sản phẩm
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-save me-1"></i>
+                                                Lưu thay đổi
                                             </button>
                                         </div>
                                     </div>
@@ -469,6 +501,18 @@
 
 <!-- Product Image Upload Script -->
 <script>
+    // Store original values for reset functionality
+    const originalValues = {
+        name: '${currentProduct.name}',
+        price: '${currentProduct.price}',
+        quantity: '${currentProduct.quantity}',
+        factory: '${currentProduct.factory}',
+        target: '${currentProduct.target}',
+        shortDesc: '${currentProduct.shortDesc}',
+        detailDesc: '${currentProduct.detailDesc}',
+        image: '${currentProduct.image}'
+    };
+
     // Product image preview
     function previewProductImage(input) {
         const img = document.getElementById('productImage');
@@ -501,28 +545,52 @@
             };
             reader.readAsDataURL(file);
         } else {
-            // Reset to placeholder if no file selected
-            img.src = '';
-            img.style.display = 'none';
-            preview.classList.remove('has-image');
+            // Reset to original image if no file selected
+            if (originalValues.image) {
+                img.src = '/images/product/' + originalValues.image;
+                img.style.display = 'block';
+                preview.classList.add('has-image');
+            } else {
+                img.src = '';
+                img.style.display = 'none';
+                preview.classList.remove('has-image');
+            }
         }
     }
 
     // Reset form function
     function resetForm() {
+        const form = document.getElementById('editProductForm');
         const img = document.getElementById('productImage');
-        const placeholder = document.getElementById('imagePlaceholder');
         const preview = document.getElementById('imagePreview');
         const fileInput = document.getElementById('imageFile');
 
-        // Reset image
-        img.src = '';
-        img.style.display = 'none';
-        preview.classList.remove('has-image');
-        fileInput.value = '';
+        // Reset to original values
+        form.elements['name'].value = originalValues.name;
+        form.elements['price'].value = originalValues.price;
+        form.elements['quantity'].value = originalValues.quantity;
+        form.elements['factory'].value = originalValues.factory;
+        form.elements['target'].value = originalValues.target;
+        form.elements['shortDesc'].value = originalValues.shortDesc;
+        form.elements['detailDesc'].value = originalValues.detailDesc;
 
-        // Reset form fields
-        document.getElementById('createProductForm').reset();
+        // Reset image
+        fileInput.value = '';
+        if (originalValues.image) {
+            img.src = '/images/product/' + originalValues.image;
+            img.style.display = 'block';
+            preview.classList.add('has-image');
+        } else {
+            img.src = '';
+            img.style.display = 'none';
+            preview.classList.remove('has-image');
+        }
+
+        // Clear validation errors
+        const errorElements = form.querySelectorAll('.is-invalid');
+        errorElements.forEach(element => {
+            element.classList.remove('is-invalid');
+        });
     }
 
     // Initialize on page load
@@ -530,9 +598,10 @@
         const img = document.getElementById('productImage');
         const preview = document.getElementById('imagePreview');
 
-        // Ensure placeholder is shown initially
-        if (!img.src || img.src === '' || img.src === window.location.href) {
-            img.style.display = 'none';
+        // Set initial image state
+        if (originalValues.image) {
+            preview.classList.add('has-image');
+        } else {
             preview.classList.remove('has-image');
         }
     });

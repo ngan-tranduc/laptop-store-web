@@ -37,14 +37,6 @@ public class UserController {
         return "admin/user/show";
     }
 
-    //detail
-    @RequestMapping(value = "/admin/user/{id}")
-    public String getUserDetailPage(Model model, @PathVariable("id") Long id){
-        User user = this.userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "admin/user/detail";
-    }
-
     //create
     @GetMapping("/admin/user/create")
     public String getCreatePage(Model model) {
@@ -52,7 +44,6 @@ public class UserController {
         model.addAttribute("roles", roleService.findAll());
         return "admin/user/create";
     }
-
     @PostMapping("/admin/user/create")
     public String createUserPage(Model model,
                                  @ModelAttribute("newUser") @Valid User user,
@@ -60,7 +51,6 @@ public class UserController {
                                  @RequestParam("avatarFile") MultipartFile file,
                                  RedirectAttributes redirectAttributes) {
         model.addAttribute("roles", roleService.findAll());
-        // Kiểm tra validation errors
         if (bindingResult.hasErrors()) {
             return "admin/user/create";
         }
@@ -74,7 +64,22 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
+    //read
+    @RequestMapping(value = "/admin/user/{id}")
+    public String getUserDetailPage(Model model, @PathVariable("id") Long id){
+        User user = this.userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "admin/user/detail";
+    }
+
     //update
+    @GetMapping(value = "/admin/user/edit/{id}")
+    public String getUserEditPage(Model model, @PathVariable long id){
+        User user = this.userService.getUserById(id);
+        model.addAttribute("currentUser", user);
+        model.addAttribute("roles", roleService.findAll());
+        return "admin/user/edit";
+    }
     @PostMapping("/admin/user/edit")
     public String postUpdateUser(@ModelAttribute("currentUser") User user, @RequestParam("avatarFile") MultipartFile file) {
         User currentUser = this.userService.getUserById(user.getId());
@@ -90,13 +95,6 @@ public class UserController {
             this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
-    }
-    @RequestMapping(value = "/admin/user/edit/{id}")
-    public String getUserEditPage(Model model, @PathVariable long id){
-        User user = this.userService.getUserById(id);
-        model.addAttribute("currentUser", user);
-        model.addAttribute("roles", roleService.findAll());
-        return "admin/user/edit";
     }
 
     //delete

@@ -2,9 +2,11 @@ package vn.nganj.laptopshop.service;
 
 import org.springframework.stereotype.Service;
 import vn.nganj.laptopshop.domain.Product;
+import vn.nganj.laptopshop.domain.User;
 import vn.nganj.laptopshop.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -20,5 +22,13 @@ public class ProductService {
 
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    public Product getProductById(Long id){
+        return this.productRepository.findById(id).get();
+    }
+
+    public void deleteById(long id) {
+        productRepository.deleteById(id);
     }
 }
