@@ -212,7 +212,7 @@
                                         </td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${not empty user.role}">
+                                                <c:when test="${not empty user.role and not empty user.role.name}">
                                                     <c:set var="roleClass" value="role-default" />
                                                     <c:set var="roleIcon" value="bi-person" />
                                                     <c:choose>
@@ -230,15 +230,15 @@
                                                         </c:when>
                                                     </c:choose>
                                                     <span class="role-badge ${roleClass}">
-                                                        <i class="bi ${roleIcon} me-1"></i>
-                                                        ${user.role.name}
-                                                    </span>
+                <i class="bi ${roleIcon} me-1"></i>
+                ${user.role.name}
+            </span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span class="role-badge role-default">
-                                                        <i class="bi bi-question-circle me-1"></i>
-                                                        No Role
-                                                    </span>
+            <span class="role-badge role-default">
+                <i class="bi bi-question-circle me-1"></i>
+                No Role
+            </span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>

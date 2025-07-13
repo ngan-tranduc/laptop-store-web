@@ -9,7 +9,10 @@ import vn.nganj.laptopshop.domain.Product;
 import vn.nganj.laptopshop.repository.UserRepository;
 import vn.nganj.laptopshop.service.ProductService;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomePageController {
@@ -22,9 +25,12 @@ public class HomePageController {
     @GetMapping("/")
     public String getHomePage(Model model){
         List<Product> products = this.productService.findAll();
-        List<Product> productsApple = this.productService.findByFactory("Apple");
+        Map<String, List<Product>> productsByFactory = products.stream()
+                .filter(p -> Arrays.asList("Apple", "Dell", "Acer", "MSI").contains(p.getFactory()))
+                .collect(Collectors.groupingBy(Product::getFactory));
+
         model.addAttribute("products", products);
-        model.addAttribute("productsApple", productsApple);
+        model.addAttribute("productsByFactory", productsByFactory);
         return "client/homepage/show";
     }
 }

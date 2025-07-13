@@ -1,6 +1,7 @@
 package vn.nganj.laptopshop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.nganj.laptopshop.domain.User;
 
@@ -14,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
 
     boolean existsByEmail(String email);
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.role")
+    List<User> findAllWithRoles();
 }
