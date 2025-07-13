@@ -14,8 +14,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUser(){
-        return this.userRepository.findAll();
+    public List<User> getAllUser() {
+        return userRepository.findAllWithRoles();
     }
 
     public List<User> getAllUserByEmail(String email){
@@ -37,4 +37,6 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+
 }

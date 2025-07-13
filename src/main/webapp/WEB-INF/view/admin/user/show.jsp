@@ -83,6 +83,16 @@
             background-color: #6c757d;
             color: white;
         }
+
+        /* Avatar color classes */
+        .avatar-color-0 { background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); }
+        .avatar-color-1 { background: linear-gradient(135deg, #198754 0%, #157347 100%); }
+        .avatar-color-2 { background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); }
+        .avatar-color-3 { background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%); color: #212529 !important; }
+        .avatar-color-4 { background: linear-gradient(135deg, #0dcaf0 0%, #3dd5f3 100%); color: #212529 !important; }
+        .avatar-color-5 { background: linear-gradient(135deg, #6c757d 0%, #5c636a 100%); }
+        .avatar-color-6 { background: linear-gradient(135deg, #212529 0%, #000 100%); }
+        .avatar-color-7 { background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); }
     </style>
 </head>
 
@@ -99,7 +109,7 @@
                 </h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                    <li class="breadcrumb-item active">User</li>
+                    <li class="breadcrumb-item active">Người dùng</li>
                 </ol>
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -136,71 +146,73 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
+                                                <c:set var="colorIndex" value="${user.id % 8}" />
                                                 <c:choose>
-                                                    <c:when test="${not empty user.avatar}">
-                                                        <img src="/images/avatar/${user.avatar}" alt="Avatar" class="user-avatar me-2"
-                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                                        <div class="rounded-circle d-none align-items-center justify-content-center me-2"
-                                                             style="width: 40px; height: 40px; font-size: 14px; color: white; background-color: #6c757d;">
-                                                            <c:choose>
-                                                                <c:when test="${not empty user.fullName}">
-                                                                    ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    ${user.email.substring(0,1).toUpperCase()}
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </div>
+                                                    <c:when test="${colorIndex == 0}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-0" />
+                                                    </c:when>
+                                                    <c:when test="${colorIndex == 1}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-1" />
+                                                    </c:when>
+                                                    <c:when test="${colorIndex == 2}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-2" />
+                                                    </c:when>
+                                                    <c:when test="${colorIndex == 3}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-3" />
+                                                    </c:when>
+                                                    <c:when test="${colorIndex == 4}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-4" />
+                                                    </c:when>
+                                                    <c:when test="${colorIndex == 5}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-5" />
+                                                    </c:when>
+                                                    <c:when test="${colorIndex == 6}">
+                                                        <c:set var="avatarColorClass" value="avatar-color-6" />
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:set var="colorIndex" value="${user.id % 8}" />
-                                                        <c:choose>
-                                                            <c:when test="${colorIndex == 0}">
-                                                                <c:set var="bgColor" value="bg-primary" />
-                                                            </c:when>
-                                                            <c:when test="${colorIndex == 1}">
-                                                                <c:set var="bgColor" value="bg-success" />
-                                                            </c:when>
-                                                            <c:when test="${colorIndex == 2}">
-                                                                <c:set var="bgColor" value="bg-danger" />
-                                                            </c:when>
-                                                            <c:when test="${colorIndex == 3}">
-                                                                <c:set var="bgColor" value="bg-warning" />
-                                                            </c:when>
-                                                            <c:when test="${colorIndex == 4}">
-                                                                <c:set var="bgColor" value="bg-info" />
-                                                            </c:when>
-                                                            <c:when test="${colorIndex == 5}">
-                                                                <c:set var="bgColor" value="bg-secondary" />
-                                                            </c:when>
-                                                            <c:when test="${colorIndex == 6}">
-                                                                <c:set var="bgColor" value="bg-dark" />
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <c:set var="bgColor" value="bg-purple" />
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                        <div class="${bgColor} rounded-circle d-flex align-items-center justify-content-center me-2"
-                                                             style="width: 40px; height: 40px; font-size: 14px; color: white; background-color: ${colorIndex == 7 ? '#6f42c1' : ''};">
-                                                            <c:choose>
-                                                                <c:when test="${not empty user.fullName}">
-                                                                    ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    ${user.email.substring(0,1).toUpperCase()}
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </div>
+                                                        <c:set var="avatarColorClass" value="avatar-color-7" />
                                                     </c:otherwise>
                                                 </c:choose>
-                                                <div>
-                                                    <div class="fw-medium">${user.fullName}</div>
+
+                                                <!-- Avatar Display -->
+                                                <div class="d-flex align-items-center">
+                                                    <c:choose>
+                                                        <c:when test="${not empty user.avatar}">
+                                                            <img src="/images/avatar/${user.avatar}" alt="Avatar" class="user-avatar me-2"
+                                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                            <div class="${avatarColorClass} rounded-circle d-none align-items-center justify-content-center me-2"
+                                                                 style="width: 40px; height: 40px; font-size: 14px; color: white;">
+                                                                <c:choose>
+                                                                    <c:when test="${not empty user.fullName}">
+                                                                        ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        ${user.email.substring(0,1).toUpperCase()}
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div class="${avatarColorClass} rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                                 style="width: 40px; height: 40px; font-size: 14px; color: white;">
+                                                                <c:choose>
+                                                                    <c:when test="${not empty user.fullName}">
+                                                                        ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        ${user.email.substring(0,1).toUpperCase()}
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
+                                                    <div>${user.fullName}</div>
                                             </div>
                                         </td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${not empty user.role}">
+                                                <c:when test="${not empty user.role and not empty user.role.name}">
                                                     <c:set var="roleClass" value="role-default" />
                                                     <c:set var="roleIcon" value="bi-person" />
                                                     <c:choose>
@@ -218,15 +230,15 @@
                                                         </c:when>
                                                     </c:choose>
                                                     <span class="role-badge ${roleClass}">
-                                                        <i class="bi ${roleIcon} me-1"></i>
-                                                        ${user.role.name}
-                                                    </span>
+                <i class="bi ${roleIcon} me-1"></i>
+                ${user.role.name}
+            </span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span class="role-badge role-default">
-                                                        <i class="bi bi-question-circle me-1"></i>
-                                                        No Role
-                                                    </span>
+            <span class="role-badge role-default">
+                <i class="bi bi-question-circle me-1"></i>
+                No Role
+            </span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>

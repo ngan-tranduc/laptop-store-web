@@ -1,6 +1,10 @@
 package vn.nganj.laptopshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "products")
@@ -9,14 +13,35 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Tên sản phẩm không được để trống")
+    @Size(max = 100, message = "Tên sản phẩm không được vượt quá 100 ký tự")
     private String name;
+
+    @Positive(message = "Giá phải lớn hơn 0")
     private double price;
+
     private String image;
+
+    @NotBlank(message = "Mô tả chi tiết không được để trống")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
+
+    @NotBlank(message = "Mô tả ngắn không được để trống")
+    @Size(max = 500, message = "Mô tả ngắn không được vượt quá 500 ký tự")
     private String shortDesc;
+
+    @Min(value = 0, message = "Số lượng không được âm")
     private long quantity;
+
+    @Min(value = 0, message = "Số lượng đã bán không được âm")
     private long sold;
+
+    @NotBlank(message = "Nhà sản xuất không được để trống")
+    @Size(max = 100, message = "Tên nhà sản xuất không được vượt quá 100 ký tự")
     private String factory;
+
+    @NotBlank(message = "Đối tượng sử dụng không được để trống")
+    @Size(max = 100, message = "Tên đối tượng sử dụng không được vượt quá 100 ký tự")
     private String target;
     public Long getId() {
         return id;
