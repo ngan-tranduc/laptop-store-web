@@ -65,13 +65,13 @@
         <div class="tab-class text-center">
             <div class="row g-4">
                 <div class="col-lg-4 text-start">
-                    <h1>Products</h1>
+                    <h1>Sản Phẩm</h1>
                 </div>
                 <div class="col-lg-8 text-end">
                     <ul class="nav nav-pills d-inline-flex text-center mb-5">
                         <li class="nav-item">
                             <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
-                                <span class="text-dark" style="width: 130px;">All Products</span>
+                                <span class="text-dark" style="width: 130px;">Tất cả</span>
                             </a>
                         </li>
 

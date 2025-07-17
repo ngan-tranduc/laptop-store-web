@@ -1,6 +1,7 @@
 package vn.nganj.laptopshop.service;
 
 import org.springframework.stereotype.Service;
+import vn.nganj.laptopshop.domain.Role;
 import vn.nganj.laptopshop.repository.RoleRepository;
 
 @Service
@@ -12,5 +13,9 @@ public class RoleService {
     public Object findAll() {
         // Assuming roleRepository has a method to find all roles
         return roleRepository.findAll();
+    }
+    public Role findByName(String name) {
+        // Assuming roleRepository has a method to find roles by name
+        return roleRepository.findByName(name);
     }
 }

@@ -2,7 +2,9 @@ package vn.nganj.laptopshop.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.nganj.laptopshop.domain.Role;
 import vn.nganj.laptopshop.domain.User;
+import vn.nganj.laptopshop.domain.dto.RegisterDTO;
 import vn.nganj.laptopshop.repository.UserRepository;
 
 import java.util.List;
@@ -10,8 +12,10 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    private final RoleService roleService;
+    public UserService(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     public List<User> getAllUser() {
@@ -38,5 +42,15 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-
+    public User registerDTOtoUser(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setFullName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
+        user.setEmail(registerDTO.getEmail());
+        user.setPassword(registerDTO.getPassword());
+        Role role = roleService.findByName("USER");
+        if (role != null) {
+            user.setRole(role);
+        }
+        return user;
+    }
 }

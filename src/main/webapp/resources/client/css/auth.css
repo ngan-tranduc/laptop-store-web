@@ -1,0 +1,506 @@
+/* Google Fonts - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #4070f4;
+    overflow-x: hidden;
+}
+
+.container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4070f4;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.form {
+    position: relative;
+    max-width: 430px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 6px;
+    background: #FFF;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+.form.signup {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.forms.show-signup .form.signup {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.forms.show-signup .form.login {
+    opacity: 0;
+    pointer-events: none;
+}
+
+header {
+    font-size: 28px;
+    font-weight: 600;
+    color: #232836;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+form {
+    margin-top: 30px;
+}
+
+.form .field {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+.field input,
+.field button {
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 6px;
+}
+
+.field input {
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #CACACA;
+    transition: border-color 0.3s ease;
+}
+
+.field input:focus {
+    border-bottom-width: 2px;
+    border-color: #0171d3;
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #8b8b8b;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.field button {
+    color: #fff;
+    background-color: #0171d3;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.field button:hover {
+    background-color: #016dcb;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.form-link span,
+.form-link a {
+    font-size: 14px;
+    font-weight: 400;
+    color: #232836;
+}
+
+.form a {
+    color: #0171d3;
+    text-decoration: none;
+}
+
+.form-content a:hover {
+    text-decoration: underline;
+}
+
+.line {
+    position: relative;
+    height: 1px;
+    width: 100%;
+    margin: 36px 0;
+    background-color: #d4d4d4;
+}
+
+.line::before {
+    content: 'Or';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFF;
+    color: #8b8b8b;
+    padding: 0 15px;
+}
+
+.media-options {
+    margin-bottom: 10px;
+}
+
+.media-options a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+a.facebook {
+    color: #fff;
+    background-color: #4267b2;
+}
+
+a.facebook:hover {
+    background-color: #365899;
+}
+
+a.facebook .facebook-icon {
+    height: 28px;
+    width: 28px;
+    color: #0171d3;
+    font-size: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.facebook-icon,
+img.google-img {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+
+img.google-img {
+    height: 20px;
+    width: 20px;
+    object-fit: cover;
+}
+
+a.google {
+    border: 1px solid #CACACA;
+    background-color: #fff;
+}
+
+a.google:hover {
+    background-color: #f8f9fa;
+    border-color: #dadce0;
+}
+
+a.google span {
+    font-weight: 500;
+    opacity: 0.6;
+    color: #232836;
+}
+
+/* Error and Success Messages */
+.error-message {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: #ffebee;
+    border-radius: 4px;
+    border-left: 4px solid #ff6b6b;
+}
+
+.success-message {
+    color: #51cf66;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: #e8f5e8;
+    border-radius: 4px;
+    border-left: 4px solid #51cf66;
+}
+
+/* Validation styling */
+.input.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.input.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    padding-left: 15px;
+}
+
+/* Name fields styling */
+.name-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.name-field {
+    flex: 1;
+}
+
+.name-field .input {
+    width: 100%;
+}
+
+.name-field .field {
+    margin-top: 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 15px;
+        min-height: 100vh;
+        align-items: flex-start;
+        padding-top: 30px;
+    }
+
+    .form {
+        max-width: 100%;
+        padding: 25px 20px;
+        margin: 0;
+    }
+
+    header {
+        font-size: 24px;
+    }
+
+    .field input,
+    .field button {
+        font-size: 14px;
+    }
+
+    .name-row {
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 0;
+    }
+
+    .name-field .field {
+        margin-top: 20px;
+        height: 50px;
+        width: 100%;
+    }
+
+    .name-field .input {
+        width: 100%;
+        height: 50px;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .form {
+        padding: 30px;
+    }
+
+    .name-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+
+    .name-field {
+        flex: 1;
+    }
+
+    .name-field .input {
+        width: 100%;
+        height: 50px;
+    }
+
+    .name-field .field {
+        margin-top: 0;
+        height: 50px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 10px;
+        padding-top: 20px;
+    }
+
+    .form {
+        padding: 20px 15px;
+    }
+
+    header {
+        font-size: 22px;
+    }
+
+    .field {
+        height: 45px;
+        margin-top: 15px;
+    }
+
+    .field input,
+    .field button {
+        font-size: 14px;
+        height: 45px;
+    }
+
+    .field input {
+        padding: 0 12px;
+    }
+
+    .form-link span,
+    .form-link a {
+        font-size: 13px;
+    }
+
+    .media-options a {
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .line {
+        margin: 25px 0;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .form {
+        padding: 15px 10px;
+    }
+
+    .field {
+        height: 42px;
+    }
+
+    .field input,
+    .field button {
+        height: 42px;
+        font-size: 13px;
+    }
+
+    header {
+        font-size: 20px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .container {
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+
+    .form {
+        margin: 0;
+    }
+
+    header {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    form {
+        margin-top: 15px;
+    }
+
+    .field {
+        margin-top: 12px;
+    }
+
+    .line {
+        margin: 20px 0;
+    }
+}
+
+/* Fix for zoom issues */
+@media screen and (min-width: 1200px) {
+    .container {
+        padding: 40px;
+    }
+}
+
+/* Ensure scrollability */
+html {
+    overflow-y: auto;
+}
+
+body {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+}
+
+/* Additional improvements for better UX */
+.form .field.input-field {
+    position: relative;
+}
+
+.form .field.input-field .invalid-feedback {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.form .field.button-field {
+    margin-top: 30px;
+}
+
+/* Smooth transitions */
+.form {
+    transition: all 0.3s ease;
+}
+
+.field input {
+    transition: all 0.3s ease;
+}
+
+/* Focus improvements */
+.field input:focus {
+    outline: none;
+    border-color: #0171d3;
+    box-shadow: 0 0 0 2px rgba(1, 113, 211, 0.2);
+}
+
+/* Button improvements */
+.field button {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.field button:active {
+    transform: translateY(1px);
+}
