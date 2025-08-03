@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import vn.nganj.laptopshop.service.CustomUserDetailsService;
 import vn.nganj.laptopshop.service.UserService;
 
@@ -42,6 +43,12 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public AuthenticationSuccessHandler customSuccessHandler(){
+        return new CustomSuccessHandler();
+    }
+
+
+    @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
@@ -56,11 +63,9 @@ public class SecurityConfiguration {
 
                 )
 
-
-
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customSuccessHandler())
                         .failureUrl("/login?error")
                         .permitAll());
 
