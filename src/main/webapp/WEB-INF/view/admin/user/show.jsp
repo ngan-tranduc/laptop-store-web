@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -145,69 +146,63 @@
                                                 ${user.email}
                                         </td>
                                         <td>
+                                            <c:set var="userSeed" value="${not empty user.id ? user.id : (not empty user.email ? user.email : user.fullName)}" />
+                                            <c:set var="avatarColorClass" value="avatar-color-${(userSeed.hashCode() % 8 + 8) % 8}" />
+
                                             <div class="d-flex align-items-center">
-                                                <c:set var="colorIndex" value="${user.id % 8}" />
                                                 <c:choose>
-                                                    <c:when test="${colorIndex == 0}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-0" />
-                                                    </c:when>
-                                                    <c:when test="${colorIndex == 1}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-1" />
-                                                    </c:when>
-                                                    <c:when test="${colorIndex == 2}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-2" />
-                                                    </c:when>
-                                                    <c:when test="${colorIndex == 3}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-3" />
-                                                    </c:when>
-                                                    <c:when test="${colorIndex == 4}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-4" />
-                                                    </c:when>
-                                                    <c:when test="${colorIndex == 5}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-5" />
-                                                    </c:when>
-                                                    <c:when test="${colorIndex == 6}">
-                                                        <c:set var="avatarColorClass" value="avatar-color-6" />
+                                                    <c:when test="${not empty user.avatar}">
+                                                        <img src="/images/avatar/${user.avatar}" alt="Avatar" class="user-avatar me-2"
+                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                        <div class="${avatarColorClass} rounded-circle d-none align-items-center justify-content-center me-2"
+                                                             style="width: 40px; height: 40px; font-size: 14px; color: white;">
+                                                            <c:choose>
+                                                                <c:when test="${not empty user.fullName and fn:length(user.fullName) > 0}">
+                                                                    <c:set var="firstName" value="${fn:substringBefore(user.fullName, ' ')}" />
+                                                                    <c:set var="lastName" value="${fn:substringAfter(user.fullName, ' ')}" />
+                                                                    <c:choose>
+                                                                        <c:when test="${not empty lastName and fn:length(lastName) > 0}">
+                                                                            ${fn:substring(firstName, 0, 1).toUpperCase()}${fn:substring(lastName, 0, 1).toUpperCase()}
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            ${fn:substring(firstName, 0, 1).toUpperCase()}
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:if test="${not empty user.email and fn:length(user.email) > 0}">
+                                                                        ${fn:substring(user.email, 0, 1).toUpperCase()}
+                                                                    </c:if>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:set var="avatarColorClass" value="avatar-color-7" />
+                                                        <div class="${avatarColorClass} rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                             style="width: 40px; height: 40px; font-size: 14px; color: white;">
+                                                            <c:choose>
+                                                                <c:when test="${not empty user.fullName and fn:length(user.fullName) > 0}">
+                                                                    <c:set var="firstName" value="${fn:substringBefore(user.fullName, ' ')}" />
+                                                                    <c:set var="lastName" value="${fn:substringAfter(user.fullName, ' ')}" />
+                                                                    <c:choose>
+                                                                        <c:when test="${not empty lastName and fn:length(lastName) > 0}">
+                                                                            ${fn:substring(firstName, 0, 1).toUpperCase()}${fn:substring(lastName, 0, 1).toUpperCase()}
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            ${fn:substring(firstName, 0, 1).toUpperCase()}
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:if test="${not empty user.email and fn:length(user.email) > 0}">
+                                                                        ${fn:substring(user.email, 0, 1).toUpperCase()}
+                                                                    </c:if>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
                                                     </c:otherwise>
                                                 </c:choose>
-
-                                                <!-- Avatar Display -->
-                                                <div class="d-flex align-items-center">
-                                                    <c:choose>
-                                                        <c:when test="${not empty user.avatar}">
-                                                            <img src="/images/avatar/${user.avatar}" alt="Avatar" class="user-avatar me-2"
-                                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                                            <div class="${avatarColorClass} rounded-circle d-none align-items-center justify-content-center me-2"
-                                                                 style="width: 40px; height: 40px; font-size: 14px; color: white;">
-                                                                <c:choose>
-                                                                    <c:when test="${not empty user.fullName}">
-                                                                        ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        ${user.email.substring(0,1).toUpperCase()}
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </div>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <div class="${avatarColorClass} rounded-circle d-flex align-items-center justify-content-center me-2"
-                                                                 style="width: 40px; height: 40px; font-size: 14px; color: white;">
-                                                                <c:choose>
-                                                                    <c:when test="${not empty user.fullName}">
-                                                                        ${user.fullName.substring(0,1).toUpperCase()}${user.fullName.indexOf(' ') > 0 ? user.fullName.substring(user.fullName.indexOf(' ') + 1, user.fullName.indexOf(' ') + 2).toUpperCase() : ''}
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        ${user.email.substring(0,1).toUpperCase()}
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </div>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                                    <div>${user.fullName}</div>
+                                                <div>${user.fullName}</div>
                                             </div>
                                         </td>
                                         <td>
