@@ -17,7 +17,9 @@
     <!-- Boxicons CSS -->
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
+
     <style>
+
         .form.signup {
             display: block !important;
             opacity: 1 !important;
@@ -26,14 +28,14 @@
 
         .error-message {
             color: #ff6b6b;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 13px;
+            margin-top: 3px;
         }
 
         .success-message {
             color: #51cf66;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 13px;
+            margin-top: 3px;
         }
 
         /* Validation styling */
@@ -50,8 +52,9 @@
         .invalid-feedback {
             display: block;
             color: #dc3545;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 13px;
+            margin-top: 3px;
+            line-height: 1.2;
         }
 
         /* Name fields styling */
@@ -98,7 +101,7 @@
                                     placeholder="Họ"
                                     class="input ${not empty errorFirstName ? 'is-invalid' : ''}"
                                     path="firstName"
-                                    required="true"/>
+                        />
                             ${errorFirstName}
                     </div>
 
@@ -110,7 +113,7 @@
                                     placeholder="Tên"
                                     class="input ${not empty errorLastName ? 'is-invalid' : ''}"
                                     path="lastName"
-                                    required="true"/>
+                        />
                             ${errorLastName}
                     </div>
                 </div>
@@ -123,7 +126,7 @@
                                 placeholder="Email"
                                 class="input ${not empty errorEmail ? 'is-invalid' : ''}"
                                 path="email"
-                                required="true"/>
+                    />
                         ${errorEmail}
                 </div>
 
@@ -135,7 +138,7 @@
                                 placeholder="Create password"
                                 class="password input ${not empty errorPassword ? 'is-invalid' : ''}"
                                 path="password"
-                                required="true"/>
+                    />
                         ${errorPassword}
                 </div>
 
@@ -147,7 +150,7 @@
                                 placeholder="Confirm password"
                                 class="password input ${not empty errorConfirmPassword ? 'is-invalid' : ''}"
                                 path="confirmPassword"
-                                required="true"/>
+                    />
                     <i class='bx bx-hide eye-icon'></i>
                         ${errorConfirmPassword}
                     <c:if test="${not empty passwordError}">

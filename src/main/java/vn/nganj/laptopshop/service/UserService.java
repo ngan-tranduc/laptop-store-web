@@ -1,7 +1,6 @@
 package vn.nganj.laptopshop.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import vn.nganj.laptopshop.domain.Role;
 import vn.nganj.laptopshop.domain.User;
 import vn.nganj.laptopshop.domain.dto.RegisterDTO;
@@ -22,10 +21,6 @@ public class UserService {
         return userRepository.findAllWithRoles();
     }
 
-    public List<User> getAllUserByEmail(String email){
-        return this.userRepository.findByEmail(email);
-    }
-
     public User handleSaveUser(User user){
         User userTemp = this.userRepository.save(user);
         return userTemp;
@@ -44,7 +39,7 @@ public class UserService {
 
     public User registerDTOtoUser(RegisterDTO registerDTO) {
         User user = new User();
-        user.setFullName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
+        user.setFullName(registerDTO.getFullName());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(registerDTO.getPassword());
         Role role = roleService.findByName("USER");
@@ -52,5 +47,13 @@ public class UserService {
             user.setRole(role);
         }
         return user;
+    }
+
+    public boolean checkEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findOneByEmail(email);
     }
 }

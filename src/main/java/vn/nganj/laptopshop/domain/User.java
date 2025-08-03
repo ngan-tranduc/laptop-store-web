@@ -19,7 +19,7 @@ public class User {
     @NotBlank(message = "Mật khẩu không được trống")
     private String password;
 
-    @Size(min = 2, max = 100, message = "Họ tên phải từ 2–100 ký tự")
+    @NotBlank(message = "Họ và tên không được trống")
     private String fullName;
 
     @Size(max = 255, message = "Địa chỉ tối đa 255 ký tự")

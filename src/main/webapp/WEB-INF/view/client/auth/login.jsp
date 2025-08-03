@@ -18,14 +18,22 @@
     <div class="form login">
         <div class="form-content">
             <header>Login</header>
-            <form action="#">
+            <form method="post" action="/login">
+                <c:if test="${param.error != null}">
+                    <div class="my-2" style="color: red;">Invalid email or password.</div>
+                </c:if>
+
                 <div class="field input-field">
-                    <input type="email" placeholder="Email" class="input">
+                    <input type="email" placeholder="Email" class="input" name="username">
                 </div>
 
                 <div class="field input-field">
-                    <input type="password" placeholder="Password" class="password">
+                    <input type="password" placeholder="Password" class="password" name="password">
                     <i class='bx bx-hide eye-icon'></i>
+                </div>
+
+                <div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </div>
 
                 <div class="form-link">
