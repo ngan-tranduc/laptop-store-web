@@ -1,3 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +24,9 @@
             <form method="post" action="/login">
                 <c:if test="${param.error != null}">
                     <div class="my-2" style="color: red;">Invalid email or password.</div>
+                </c:if>
+                <c:if test="${param.logout != null}">
+                    <div class="my-2" style="color: green;">Logout success.</div>
                 </c:if>
 
                 <div class="field input-field">
