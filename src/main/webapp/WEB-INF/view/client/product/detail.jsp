@@ -86,10 +86,10 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <h4 class="fw-bold mb-3">${product.name}</h4>
+                        <h4 class="fw-bold mb-3" style="font-family: 'Segoe UI', 'Roboto', 'Noto Sans', 'Arial', sans-serif">${product.name}</h4>
                         <p class="mb-3">Nhà sản xuất: ${product.factory}</p>
                         <p class="mb-3">Đối tượng sử dụng: ${product.target}</p>
-                        <h5 class="fw-bold mb-3"><fmt:formatNumber value="${product.price}" pattern="#,### "/> VND</h5>
+                        <h5 class="fw-bold mb-3" style="font-family: 'Segoe UI', 'Roboto', 'Noto Sans', 'Arial', sans-serif; color: red"><fmt:formatNumber value="${product.price}" pattern="#,### "/> VND</h5>
                         <div class="d-flex mb-4">
                             <i class="fa fa-star text-secondary"></i>
                             <i class="fa fa-star text-secondary"></i>
@@ -281,62 +281,83 @@
             <div class="col-lg-4 col-xl-3">
                 <div class="row g-4 fruite">
                     <div class="col-lg-12">
-                        <div class="input-group w-100 mx-auto d-flex mb-4">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                        </div>
                         <div class="mb-4">
-                            <h4>Sản phẩm</h4>
+                            <h4>Hãng sản xuất</h4>
                             <ul class="list-unstyled fruite-categorie">
                                 <li>
                                     <div class="d-flex justify-content-between fruite-name">
-                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Apple</a>
+                                        <a href="#"><i class="fab fa-apple me-2"></i>Apple</a>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="d-flex justify-content-between fruite-name">
-                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Dell</a>
+                                        <a href="#"><i class="fas fa-laptop me-2"></i>Dell</a>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="d-flex justify-content-between fruite-name">
-                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>Acer</a>
+                                        <a href="#"><i class="fas fa-desktop me-2"></i>Acer</a>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="d-flex justify-content-between fruite-name">
-                                        <a href="#"><i class="fas fa-apple-alt me-2"></i>MSI</a>
+                                        <a href="#"><i class="fas fa-gamepad me-2"></i>MSI</a>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-12">
-                        <h4 class="mb-4">Featured products</h4>
-                        <c:forEach items="${products}" var="product" begin="0" end="5">
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded" style="width: 100px; height: 100px;">
-                                    <img src="/images/product/${product.image}" class="img-fluid rounded" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">${product.name}</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
+                        <h4 class="mb-4">Sản phẩm nổi bật</h4>
+                        <c:forEach items="${products}" var="product" begin="0" end="7">
+                            <div class="d-flex align-items-center justify-content-start mb-3 p-2 border-bottom">
+                                <!-- Product Image -->
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="rounded shadow-sm" style="width: 80px; height: 80px; overflow: hidden;">
+                                        <img src="/images/product/${product.image}"
+                                             class="img-fluid"
+                                             alt="${product.name}"
+                                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
+                                             onmouseover="this.style.transform='scale(1.05)'"
+                                             onmouseout="this.style.transform='scale(1)'">
                                     </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">
-                                            <fmt:formatNumber value="${product.price}" pattern="#,###"/> VNĐ
+                                </div>
+
+                                <!-- Product Info -->
+                                <div class="flex-grow-1">
+                                    <!-- Product Name -->
+                                    <h6 class="mb-2 fw-semibold">
+                                        <a href="/product/${product.id}"
+                                           class="text-decoration-none text-dark hover-text-primary"
+                                           style="font-family: 'Segoe UI', 'Roboto', 'Noto Sans', 'Arial', sans-serif;line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                                ${product.name}
+                                        </a>
+                                    </h6>
+
+                                    <!-- Rating Stars -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="me-2">
+                                            <i class="fa fa-star text-warning"></i>
+                                            <i class="fa fa-star text-warning"></i>
+                                            <i class="fa fa-star text-warning"></i>
+                                            <i class="fa fa-star text-warning"></i>
+                                            <i class="fa fa-star text-muted"></i>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Price -->
+                                    <div class="d-flex align-items-center">
+                                        <h5 class="fw-bold text-danger mb-0"
+                                            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.1rem;">
+                                            <fmt:formatNumber value="${product.price}" pattern="#,###"/> VND
                                         </h5>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
                         <div class="d-flex justify-content-center my-4">
-                            <a href="/" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Vew More</a>
+                            <a href="/" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem thêm</a>
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -350,39 +371,36 @@
                 </div>
             </div>
         </div>
-        <h1 class="fw-bold mb-0">Related products</h1>
+        <h1 class="fw-bold mb-0">Sản phẩm đề xuất</h1>
         <div class="vesitable">
-            <div class="owl-carousel vegetable-carousel justify-content-center" style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <div class="owl-carousel vegetable-carousel justify-content-center" style="display: flex; flex-wrap: wrap; gap: 25px; padding: 20px;">
                 <c:forEach items="${products}" var="product">
-                    <a href="/product/${product.id}" style="text-decoration: none; color: inherit; display: block;">
-                        <div class="border border-primary rounded position-relative vesitable-item" style="flex: 1; min-width: 250px; max-width: 300px; display: flex; flex-direction: column; height: 450px; cursor: pointer; transition: transform 0.2s ease;">
-                            <div class="vesitable-img" style="flex-shrink: 0; height: 170px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <a href="/product/${product.id}" style="text-decoration: none; color: inherit; display: block; flex: 1; min-width: 280px; max-width: 320px;">
+                        <div class="border border-primary rounded position-relative vesitable-item" style="display: flex; flex-direction: column; height: 480px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 10px;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                            <div class="vesitable-img" style="flex-shrink: 0; height: 180px; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;">
                                 <img src="/images/product/${product.image}"
                                      class="rounded-top"
                                      alt="${product.name}"
-                                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                     style="font-family: 'Segoe UI', 'Roboto', 'Noto Sans', 'Arial', sans-serif;width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease;"
+                                     onmouseover="this.style.transform='scale(1.05)'"
+                                     onmouseout="this.style.transform='scale(1)'">
                             </div>
 
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 10px; right: 10px;">
+                                 style="top: 12px; right: 12px; font-size: 0.85rem; font-weight: 500;">
                                     ${product.target}
                             </div>
 
-                            <div class="p-4 pb-0 rounded-bottom" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-height: 0;">
+                            <div class="p-4 pb-0 rounded-bottom" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-height: 0; padding: 20px;">
                                 <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
-                                    <h4 style="margin-bottom: 10px; font-size: 1.1rem; line-height: 1.3; height: 2.6rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${product.name}</h4>
-                                    <p style="margin-bottom: 15px; font-size: 0.9rem; line-height: 1.4; height: 4.2rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; color: #666;">${product.shortDesc}</p>
+                                    <h4 style="margin-bottom: 12px; font-size: 1.2rem; line-height: 1.3; height: 3rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-weight: 600; color: #333;">${product.name}</h4>
+                                    <p style="margin-bottom: 18px; font-size: 0.9rem; line-height: 1.5; height: 4.5rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; color: #666;">${product.shortDesc}</p>
                                 </div>
 
-                                <div class="d-flex justify-content-between flex-lg-wrap align-items-center" style="margin-top: auto; padding-top: 10px; margin-bottom: 20px;">
-                                    <p class="text-dark fs-5 fw-bold" style="margin-bottom: 0;">
-                                        <fmt:formatNumber value="${product.price}" pattern="#,###"/>
+                                <div class="d-flex justify-content-between flex-lg-wrap align-items-center" style="margin-top: auto; padding-top: 15px; margin-bottom: 20px; border-top: 1px solid #eee;">
+                                    <p class="fs-5 fw-bold" style="margin-bottom: 0; color: #dc3545; font-size: 1.3rem !important; font-weight: 700 !important;">
+                                        <fmt:formatNumber value="${product.price}" pattern="#,###"/> ₫
                                     </p>
-                                    <span class="btn border border-secondary rounded-pill px-3 py-1 text-primary"
-                                          style="white-space: nowrap; flex-shrink: 0; pointer-events: none;">
-                                <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                                Add
-                            </span>
                                 </div>
                             </div>
                         </div>
