@@ -50,7 +50,7 @@
                 <div class="d-flex justify-content-between align-items-center mt-auto">
                     <p class="text-dark fs-5 fw-bold mb-0"
                        style="color: #e74c3c !important; font-size: 1.2rem;">
-                        <fmt:formatNumber value="${product.price}" pattern="#,###"/> VND
+                        <fmt:formatNumber value="${product.price}" pattern="#,###"/>
                     </p>
                 </div>
             </div>

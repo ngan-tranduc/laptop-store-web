@@ -71,7 +71,7 @@
                 <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách trả góp</a>
                 <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách khui hộp sản phẩm</a>
                 <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách giao hàng & lắp đặt</a>
-                <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách mạng di động FPT</a>
+                <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách mạng di động NGANJ</a>
                 <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Quy định về hỗ trợ kỹ thuật & sao lưu dữ liệu</a>
                 <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách giao hàng & lắp đặt Điện máy, Gia dụng</a>
                 <a href="#" style="color: #cccccc; text-decoration: none; display: block; margin-bottom: 8px;">Chính sách chương trình khách hàng thân thiết</a>
