@@ -1,8 +1,12 @@
 package vn.nganj.laptopshop.service;
 
 import org.springframework.stereotype.Service;
+import vn.nganj.laptopshop.domain.Cart;
+import vn.nganj.laptopshop.domain.CartDetail;
 import vn.nganj.laptopshop.domain.Product;
 import vn.nganj.laptopshop.domain.User;
+import vn.nganj.laptopshop.repository.CartDetailRepository;
+import vn.nganj.laptopshop.repository.CartRepository;
 import vn.nganj.laptopshop.repository.ProductRepository;
 
 import java.util.Collections;
@@ -16,10 +20,12 @@ import org.springframework.data.domain.Pageable;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
+    // Product methods
     public Product handleSaveProduct(Product product) {
         Product productTemp = productRepository.save(product);
         return productTemp;
@@ -36,6 +42,7 @@ public class ProductService {
     public void deleteById(long id) {
         productRepository.deleteById(id);
     }
+
     public Page<Product> findAll(Pageable pageable) {
         return productRepository.findAll(pageable);
     }

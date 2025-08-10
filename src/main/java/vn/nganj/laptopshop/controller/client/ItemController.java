@@ -1,9 +1,12 @@
 package vn.nganj.laptopshop.controller.client;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import vn.nganj.laptopshop.domain.Product;
 import vn.nganj.laptopshop.repository.ProductRepository;
 import vn.nganj.laptopshop.repository.UserRepository;
@@ -28,6 +31,15 @@ public class ItemController {
         model.addAttribute("product", product);
 
         return "client/product/detail";
+    }
+
+    @PostMapping("add-product-to-cart/{id}")
+    public String addProductToCart(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String email = (String) session.getAttribute("email");
+        Long productId = id;
+        this.productService.handleAddProductToCart(email, productId);
+        return "redirect:/";
     }
 
 }
