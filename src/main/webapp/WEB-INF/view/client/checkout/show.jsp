@@ -149,7 +149,7 @@
 <!-- Checkout Page Start -->
 <div class="container-fluid pb-5">
     <div class="container py-5">
-        <form action="/checkout" method="post">
+        <form action="/place-order" method="post">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
             <div class="row g-5">
@@ -163,33 +163,33 @@
 
                             <div class="form-item mb-4">
                                 <label class="form-label fw-semibold">Họ và tên <sup class="text-danger">*</sup></label>
-                                <input type="text" name="fullName" class="form-control"
+                                <input type="text" name="receiverName" class="form-control"
                                        value="${user.fullName}" required>
                             </div>
 
                             <div class="form-item mb-4">
                                 <label class="form-label fw-semibold">Địa chỉ <sup class="text-danger">*</sup></label>
-                                <input type="text" name="address" class="form-control"
+                                <input type="text" name="receiverAddress" class="form-control"
                                        value="${user.address}" required>
                             </div>
 
                             <div class="form-item mb-4">
                                 <label class="form-label fw-semibold">Số điện thoại <sup class="text-danger">*</sup></label>
-                                <input type="tel" name="phone" class="form-control"
+                                <input type="tel" name="receiverPhone" class="form-control"
                                        value="${user.phone}" required>
                             </div>
 
-                            <div class="form-item mb-4">
-                                <label class="form-label fw-semibold">Email <sup class="text-danger">*</sup></label>
-                                <input type="email" name="email" class="form-control"
-                                       value="${user.email}" readonly style="background-color: #f8f9fa;">
-                            </div>
+<%--                            <div class="form-item mb-4">--%>
+<%--                                <label class="form-label fw-semibold">Email <sup class="text-danger">*</sup></label>--%>
+<%--                                <input type="email" name="email" class="form-control"--%>
+<%--                                       value="${user.email}" readonly style="background-color: #f8f9fa;">--%>
+<%--                            </div>--%>
 
-                            <div class="form-item">
-                                <label class="form-label fw-semibold">Ghi chú đơn hàng</label>
-                                <textarea name="orderNotes" class="form-control" rows="4"
-                                          placeholder="Ghi chú đặc biệt cho đơn hàng của bạn (Tùy chọn)"></textarea>
-                            </div>
+<%--                            <div class="form-item">--%>
+<%--                                <label class="form-label fw-semibold">Ghi chú đơn hàng</label>--%>
+<%--                                <textarea name="orderNotes" class="form-control" rows="4"--%>
+<%--                                          placeholder="Ghi chú đặc biệt cho đơn hàng của bạn (Tùy chọn)"></textarea>--%>
+<%--                            </div>--%>
                         </div>
                     </div>
                 </div>

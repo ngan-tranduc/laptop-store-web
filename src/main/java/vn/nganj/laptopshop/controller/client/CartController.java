@@ -13,6 +13,8 @@ import vn.nganj.laptopshop.domain.Product;
 import vn.nganj.laptopshop.domain.User;
 import vn.nganj.laptopshop.repository.CartDetailRepository;
 import vn.nganj.laptopshop.repository.CartRepository;
+import vn.nganj.laptopshop.repository.OrderDetailRepository;
+import vn.nganj.laptopshop.repository.OrderRepository;
 import vn.nganj.laptopshop.service.ProductService;
 import vn.nganj.laptopshop.service.UserService;
 
@@ -22,16 +24,20 @@ import java.util.Map;
 
 @Controller
 public class CartController {
-    UserService userService;
-    ProductService productService;
+    private final UserService userService;
+    private final ProductService productService;
     private final CartDetailRepository cartDetailRepository;
     private final CartRepository cartRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
-    public CartController(CartDetailRepository cartDetailRepository, CartRepository cartRepository, UserService userService, ProductService productService) {
-        this.cartDetailRepository = cartDetailRepository;
-        this.cartRepository = cartRepository;
+    public CartController(UserService userService, ProductService productService, CartDetailRepository cartDetailRepository, CartRepository cartRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository) {
         this.userService = userService;
         this.productService = productService;
+        this.cartDetailRepository = cartDetailRepository;
+        this.cartRepository = cartRepository;
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     @GetMapping("/cart")
@@ -287,47 +293,6 @@ public class CartController {
         return "client/checkout/show";
     }
 
-    @PostMapping("/cart/clear")
-    @ResponseBody
-    public ResponseEntity<?> clearCart(HttpServletRequest request) {
-        try {
-            HttpSession session = request.getSession(false);
-            if (session == null || session.getAttribute("email") == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Vui lòng đăng nhập"));
-            }
-
-            String email = (String) session.getAttribute("email");
-            User user = this.userService.getUserByEmail(email);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Người dùng không tồn tại"));
-            }
-
-            Cart cart = user.getCart();
-            if (cart != null) {
-                // Xóa tất cả CartDetail
-                this.cartDetailRepository.deleteByCart(cart);
-
-                // Cập nhật cart sum = 0
-                cart.setSum(0);
-                this.cartRepository.save(cart);
-
-                // Cập nhật session
-                session.setAttribute("sum", 0);
-            }
-
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Đã xóa tất cả sản phẩm trong giỏ hàng"
-            ));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Có lỗi xảy ra: " + e.getMessage()));
-        }
-    }
-
     private void updateCartSum(Cart cart, HttpSession session) {
         List<CartDetail> cartDetails = this.cartDetailRepository.findByCart(cart);
 
@@ -388,4 +353,22 @@ public class CartController {
                     .body(Map.of("error", "Có lỗi xảy ra: " + e.getMessage()));
         }
     }
+
+    @PostMapping("/place-order")
+    public String handlePlaceOrder(
+            HttpServletRequest request,
+            @RequestParam("receiverName") String receiverName,
+            @RequestParam("receiverAddress") String receiverAddress,
+            @RequestParam("receiverPhone") String receiverPhone) {
+
+        User currentUser = new User(); // null
+        HttpSession session = request.getSession(false);
+        long id = (long) session.getAttribute("id");
+        currentUser.setId(id);
+
+        this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone);
+
+        return "redirect:/";
+    }
+
 }

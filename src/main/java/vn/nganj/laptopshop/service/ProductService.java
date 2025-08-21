@@ -2,13 +2,8 @@ package vn.nganj.laptopshop.service;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
-import vn.nganj.laptopshop.domain.Cart;
-import vn.nganj.laptopshop.domain.CartDetail;
-import vn.nganj.laptopshop.domain.Product;
-import vn.nganj.laptopshop.domain.User;
-import vn.nganj.laptopshop.repository.CartDetailRepository;
-import vn.nganj.laptopshop.repository.CartRepository;
-import vn.nganj.laptopshop.repository.ProductRepository;
+import vn.nganj.laptopshop.domain.*;
+import vn.nganj.laptopshop.repository.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +12,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import vn.nganj.laptopshop.repository.UserRepository;
 
 @Service
 public class ProductService {
@@ -26,13 +20,17 @@ public class ProductService {
     private final UserRepository userRepository;
     private final CartDetailRepository cartDetailRepository;
     private final UserService userService;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
-    public ProductService(ProductRepository productRepository, CartRepository cartRepository, UserRepository userRepository, CartDetailRepository cartDetailRepository, UserService userService) {
+    public ProductService(ProductRepository productRepository, CartRepository cartRepository, UserRepository userRepository, CartDetailRepository cartDetailRepository, UserService userService, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.cartDetailRepository = cartDetailRepository;
         this.userService = userService;
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     // Product methods
@@ -111,5 +109,49 @@ public class ProductService {
         } else {
             throw new RuntimeException("Product not found with id: " + productId);
         }
+    }
+    public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress, String receiverPhone) {
+
+        // Tạo đơn hàng mới
+        Order order = new Order();
+        order.setUser(user);
+        order.setReceiverName(receiverName);
+        order.setReceiverAddress(receiverAddress);
+        order.setReceiverPhone(receiverPhone);
+        order.setStatus("Pending");
+        order = this.orderRepository.save(order);
+
+        Cart cart = this.cartRepository.findByUser(user);
+        if (cart == null || cart.getCartDetails().isEmpty()) {
+            throw new RuntimeException("Cart is empty or not found for user: " + user.getEmail());
+        }
+
+        // Tính tổng giá trị đơn hàng
+        double totalPrice = cart.getCartDetails().stream()
+                .mapToDouble(cd -> cd.getPrice() * cd.getQuantity())
+                .sum();
+        order.setTotalPrice(totalPrice);
+
+        // Lưu đơn hàng
+        Order savedOrder = this.orderRepository.save(order);
+
+        // Lưu chi tiết đơn hàng
+        for (CartDetail cartDetail : cart.getCartDetails()) {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrder(savedOrder);
+            orderDetail.setProduct(cartDetail.getProduct());
+            orderDetail.setPrice(cartDetail.getPrice());
+            orderDetail.setQuantity(cartDetail.getQuantity());
+            this.orderDetailRepository.save(orderDetail);
+        }
+
+        // Xóa giỏ hàng sau khi đặt hàng thành công
+        for(CartDetail cartDetail : cart.getCartDetails()) {
+            this.cartDetailRepository.deleteById(cartDetail.getId());
+        }
+        this.cartRepository.deleteById(cart.getId());
+
+        // Cập nhật session
+        session.setAttribute("sum", 0);
     }
 }
