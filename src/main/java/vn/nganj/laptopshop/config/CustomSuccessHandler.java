@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Component;
+import vn.nganj.laptopshop.domain.Cart;
 import vn.nganj.laptopshop.domain.User;
 import vn.nganj.laptopshop.service.UserService;
 
@@ -56,6 +57,14 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         if (user != null) {
             session.setAttribute("fullName", user.getFullName());
             session.setAttribute("avatar", user.getAvatar());
+            session.setAttribute("id", user.getId());
+            session.setAttribute("email", user.getEmail());
+            Cart userCart = user.getCart();
+            if (userCart != null) {
+                session.setAttribute("sum", userCart.getSum());
+            } else {
+                session.setAttribute("sum", 0);
+            }
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 //        session.setAttribute("fullName", request.getUserPrincipal().getName());

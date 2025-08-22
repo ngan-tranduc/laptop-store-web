@@ -3,6 +3,7 @@ package vn.nganj.laptopshop.config;
 import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -66,9 +67,13 @@ public class SecurityConfiguration {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD,
                                 DispatcherType.INCLUDE).permitAll()
 
-                        .requestMatchers("/","product/**", "/login", "/client/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/product/**", "/login", "/register", "/client/**", "/css/**", "/js/**", "/images/**").permitAll()
 
-                        .requestMatchers("admin/**", "/assets/**").hasRole("ADMIN")
+                        // Cart endpoints cần authentication
+                        .requestMatchers(HttpMethod.GET, "/cart").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/cart/**").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/admin/**", "/assets/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
 
@@ -90,9 +95,17 @@ public class SecurityConfiguration {
                         .successHandler(customSuccessHandler())
                         .failureUrl("/login?error")
                         .permitAll())
-                .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"));
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
+
+                // QUAN TRỌNG: Cấu hình CSRF
+                .csrf(csrf -> csrf
+                                // Tùy chọn 1: Tắt CSRF cho cart endpoints (dễ nhất)
+                                .ignoringRequestMatchers("/cart/**")
+
+                        // Tùy chọn 2: Hoặc cấu hình CSRF token repository
+                        // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                );
 
         return http.build();
     }
-
 }

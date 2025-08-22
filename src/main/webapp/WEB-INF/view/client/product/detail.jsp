@@ -42,6 +42,13 @@
 
 <jsp:include page="../layout/header.jsp"/>
 
+<div class="container" style="padding-top: 110px;">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Chi tiết sản phẩm</li>
+    </ol>
+</div>
+
 <!-- Modal Search Start -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
@@ -73,7 +80,7 @@
 <%--<!-- Single Page Header end -->--%>
 
 <!-- Single Product Start -->
-<div class="container-fluid py-5 mt-5">
+<div class="container-fluid pb-5">
     <div class="container py-5">
         <div class="row g-4 mb-5">
             <div class="col-lg-8 col-xl-9">
@@ -309,7 +316,7 @@
                     </div>
                     <div class="col-lg-12">
                         <h4 class="mb-4">Sản phẩm nổi bật</h4>
-                        <c:forEach items="${products}" var="product" begin="0" end="7">
+                        <c:forEach items="${products}" var="product" begin="0" end="5">
                             <div class="d-flex align-items-center justify-content-start mb-3 p-2 border-bottom">
                                 <!-- Product Image -->
                                 <div class="flex-shrink-0 me-3">
@@ -373,33 +380,109 @@
         </div>
         <h1 class="fw-bold mb-0">Sản phẩm đề xuất</h1>
         <div class="vesitable">
-            <div class="owl-carousel vegetable-carousel justify-content-center" style="display: flex; flex-wrap: wrap; gap: 25px; padding: 20px;">
+            <div class="owl-carousel vegetable-carousel justify-content-center"
+                 style="display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                padding: 20px;
+                align-items: stretch;">
                 <c:forEach items="${products}" var="product">
-                    <a href="/product/${product.id}" style="text-decoration: none; color: inherit; display: block; flex: 1; min-width: 280px; max-width: 320px;">
-                        <div class="border border-primary rounded position-relative vesitable-item" style="display: flex; flex-direction: column; height: 480px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 10px;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
-                            <div class="vesitable-img" style="flex-shrink: 0; height: 180px; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;">
+                    <a href="/product/${product.id}"
+                       style="text-decoration: none;
+                      color: inherit;
+                      display: flex;
+                      flex: 0 0 calc(25% - 15px);
+                      min-width: 250px;
+                      max-width: 320px;">
+                        <div class="border border-primary rounded position-relative vesitable-item"
+                             style="display: flex;
+                            flex-direction: column;
+                            height: 480px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            margin-bottom: 10px;
+                            width: 100%;"
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.15)'"
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+
+                            <div class="vesitable-img"
+                                 style="flex-shrink: 0;
+                                height: 180px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border-radius: 8px 8px 0 0;">
                                 <img src="/images/product/${product.image}"
                                      class="rounded-top"
                                      alt="${product.name}"
-                                     style="font-family: 'Segoe UI', 'Roboto', 'Noto Sans', 'Arial', sans-serif;width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease;"
+                                     style="font-family: 'Segoe UI', 'Roboto', 'Noto Sans', 'Arial', sans-serif;
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    display: block;
+                                    transition: transform 0.3s ease;"
                                      onmouseover="this.style.transform='scale(1.05)'"
                                      onmouseout="this.style.transform='scale(1)'">
                             </div>
 
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                 style="top: 12px; right: 12px; font-size: 0.85rem; font-weight: 500;">
+                                 style="top: 12px;
+                                right: 12px;
+                                font-size: 0.85rem;
+                                font-weight: 500;
+                                z-index: 1;">
                                     ${product.target}
                             </div>
 
-                            <div class="p-4 pb-0 rounded-bottom" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-height: 0; padding: 20px;">
-                                <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
-                                    <h4 style="margin-bottom: 12px; font-size: 1.2rem; line-height: 1.3; height: 3rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-weight: 600; color: #333;">${product.name}</h4>
-                                    <p style="margin-bottom: 18px; font-size: 0.9rem; line-height: 1.5; height: 4.5rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; color: #666;">${product.shortDesc}</p>
+                            <div class="p-4 pb-0 rounded-bottom"
+                                 style="flex: 1;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                                min-height: 0;
+                                padding: 20px;">
+                                <div style="flex: 1;
+                                    display: flex;
+                                    flex-direction: column;
+                                    overflow: hidden;">
+                                    <h4 style="margin-bottom: 12px;
+                                       font-size: 1.2rem;
+                                       line-height: 1.3;
+                                       height: 3rem;
+                                       overflow: hidden;
+                                       display: -webkit-box;
+                                       -webkit-line-clamp: 2;
+                                       -webkit-box-orient: vertical;
+                                       font-weight: 600;
+                                       color: #333;">
+                                            ${product.name}
+                                    </h4>
+                                    <p style="margin-bottom: 18px;
+                                      font-size: 0.9rem;
+                                      line-height: 1.5;
+                                      height: 4.5rem;
+                                      overflow: hidden;
+                                      display: -webkit-box;
+                                      -webkit-line-clamp: 3;
+                                      -webkit-box-orient: vertical;
+                                      color: #666;">
+                                            ${product.shortDesc}
+                                    </p>
                                 </div>
 
-                                <div class="d-flex justify-content-between flex-lg-wrap align-items-center" style="margin-top: auto; padding-top: 15px; margin-bottom: 20px; border-top: 1px solid #eee;">
-                                    <p class="fs-5 fw-bold" style="margin-bottom: 0; color: #dc3545; font-size: 1.3rem !important; font-weight: 700 !important;">
-                                        <fmt:formatNumber value="${product.price}" pattern="#,###"/> ₫
+                                <div class="d-flex justify-content-between flex-lg-wrap align-items-center"
+                                     style="margin-top: auto;
+                                    padding-top: 15px;
+                                    margin-bottom: 20px;
+                                    border-top: 1px solid #eee;">
+                                    <p class="fs-5 fw-bold"
+                                       style="margin-bottom: 0;
+                                      color: #dc3545;
+                                      font-size: 1.3rem !important;
+                                      font-weight: 700 !important;">
+                                        <fmt:formatNumber value="${product.price}" pattern="#,###"/>
                                     </p>
                                 </div>
                             </div>
@@ -408,7 +491,6 @@
                 </c:forEach>
             </div>
         </div>
-    </div>
 </div>
 <!-- Single Product End -->
 

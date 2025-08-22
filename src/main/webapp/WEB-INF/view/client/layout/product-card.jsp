@@ -50,7 +50,7 @@
                 <div class="d-flex justify-content-between align-items-center mt-auto">
                     <p class="text-dark fs-5 fw-bold mb-0"
                        style="color: #e74c3c !important; font-size: 1.2rem;">
-                        <fmt:formatNumber value="${product.price}" pattern="#,###"/> VND
+                        <fmt:formatNumber value="${product.price}" pattern="#,###"/>
                     </p>
                 </div>
             </div>
@@ -58,17 +58,19 @@
 
         <!-- Conditional Add to Cart Button - Only show if quantity > 0 -->
         <c:if test="${product.quantity > 0}">
-            <div class="position-absolute" style="bottom: 20px; right: 20px; z-index: 10;">
-                <a href="#"
-                   class="btn border border-secondary rounded-pill px-3 text-primary d-flex align-items-center"
-                   style="font-size: 0.85rem; padding: 0.5rem 1rem; transition: all 0.3s ease; text-decoration: none;"
-                   onmouseover="this.style.backgroundColor='#28a745'; this.style.borderColor='#28a745'; this.style.color='white'; this.style.transform='scale(1.05)'"
-                   onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#6c757d'; this.style.color='#007bff'; this.style.transform='scale(1)'"
-                   onclick="addToCart(${product.id}); return false;">
-                    <i class="fa fa-shopping-bag me-2"></i>
-                    Thêm
-                </a>
-            </div>
+            <form action="/add-product-to-cart/${product.id}" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <div class="position-absolute" style="bottom: 20px; right: 20px; z-index: 10;">
+                    <button type="submit"
+                            class="btn border border-secondary rounded-pill px-3 text-primary d-flex align-items-center"
+                            style="font-size: 0.85rem; padding: 0.5rem 1rem; transition: all 0.3s ease; text-decoration: none;"
+                            onmouseover="this.style.backgroundColor='#28a745'; this.style.borderColor='#28a745'; this.style.color='white'; this.style.transform='scale(1.05)'"
+                            onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#6c757d'; this.style.color='#007bff'; this.style.transform='scale(1)'">
+                        <i class="fa fa-shopping-bag me-2"></i>
+                        Thêm
+                    </button>
+                </div>
+            </form>
         </c:if>
 
         <c:if test="${product.quantity <= 0}">
