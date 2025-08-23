@@ -13,8 +13,49 @@
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
     <link href="/css/styles.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
+
+<style>
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+    .status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #f59e0b;
+    }
+
+    .status-confirmed {
+        background-color: #dbeafe;
+        color: #1e40af;
+        border: 1px solid #3b82f6;
+    }
+
+    .status-shipping {
+        background-color: #e0e7ff;
+        color: #4338ca;
+        border: 1px solid #6366f1;
+    }
+
+    .status-delivered {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #10b981;
+    }
+
+    .status-cancelled {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #ef4444;
+    }
+</style>
 
 <body class="sb-nav-fixed">
 <jsp:include page="../layout/header.jsp"/>
@@ -44,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="/admin/orders">Xem Chi Tiết</a>
+                                <a class="small text-white stretched-link" href="/admin/order">Xem Chi Tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
@@ -85,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="/admin/products">Quản Lý Sản Phẩm</a>
+                                <a class="small text-white stretched-link" href="/admin/product">Quản Lý Sản Phẩm</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
@@ -104,7 +145,7 @@
                                 </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="/admin/users">Quản Lý Người Dùng</a>
+                                <a class="small text-white stretched-link" href="/admin/user">Quản Lý Người Dùng</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
@@ -143,7 +184,7 @@
                         <i class="fas fa-table me-1"></i>
                         Đơn Hàng Gần Đây
                         <div class="float-end">
-                            <a href="/admin/orders" class="btn btn-primary btn-sm">Xem Tất Cả</a>
+                            <a href="/admin/order" class="btn btn-primary btn-sm">Xem Tất Cả</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -154,8 +195,7 @@
                                 <th>Khách Hàng</th>
                                 <th>Tổng Tiền</th>
                                 <th>Trạng Thái</th>
-                                <th>Ngày Tạo</th>
-                                <th>Thao Tác</th>
+                                <th>Ngày Đặt</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -173,19 +213,29 @@
                                     <td>
                                         <c:choose>
                                             <c:when test="${order.status == 'PENDING'}">
-                                                <span class="badge bg-warning">Chờ Xử Lý</span>
+                                                <span class="status-badge status-pending">
+                                                        <i class="bi bi-clock me-1"></i>Chờ xác nhận
+                                                    </span>
                                             </c:when>
                                             <c:when test="${order.status == 'CONFIRMED'}">
-                                                <span class="badge bg-info">Đã Xác Nhận</span>
+                                                <span class="status-badge status-confirmed">
+                                                        <i class="bi bi-check-circle me-1"></i>Đã xác nhận
+                                                    </span>
                                             </c:when>
                                             <c:when test="${order.status == 'SHIPPING'}">
-                                                <span class="badge bg-primary">Đang Giao</span>
+                                                <span class="status-badge status-shipping">
+                                                        <i class="bi bi-truck me-1"></i>Đang giao
+                                                    </span>
                                             </c:when>
-                                            <c:when test="${order.status == 'COMPLETED'}">
-                                                <span class="badge bg-success">Hoàn Thành</span>
+                                            <c:when test="${order.status == 'DELIVERED'}">
+                                                <span class="status-badge status-delivered">
+                                                        <i class="bi bi-check2-all me-1"></i>Hoàn thành
+                                                    </span>
                                             </c:when>
                                             <c:when test="${order.status == 'CANCELLED'}">
-                                                <span class="badge bg-danger">Đã Hủy</span>
+                                                  <span class="status-badge status-cancelled">
+                                                        <i class="bi bi-x-circle me-1"></i>Đã hủy
+                                                    </span>
                                             </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-secondary">${order.status}</span>
@@ -195,14 +245,14 @@
 
                                     <td>${order.formattedCreatedAtWithTime}</td>
 
-                                    <td>
-                                        <a href="/admin/orders/${order.id}" class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="/admin/orders/${order.id}/edit" class="btn btn-outline-secondary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
+<%--                                    <td>--%>
+<%--                                        <a href="/admin/orders/${order.id}" class="btn btn-outline-primary btn-sm">--%>
+<%--                                            <i class="fas fa-eye"></i>--%>
+<%--                                        </a>--%>
+<%--                                        <a href="/admin/orders/${order.id}/edit" class="btn btn-outline-secondary btn-sm">--%>
+<%--                                            <i class="fas fa-edit"></i>--%>
+<%--                                        </a>--%>
+<%--                                    </td>--%>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -211,8 +261,9 @@
                 </div>
 
                 <!-- Top Selling Products -->
-                <div class="row">
-                    <div class="col-xl-6">
+                <div class="row g-3">
+                    <!-- Bảng Sản Phẩm Bán Chạy -->
+                    <div class="col-6">
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-fire me-1"></i>
@@ -222,13 +273,23 @@
                                 <c:forEach var="product" items="${topSellingProducts}" varStatus="status">
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="me-3">
-                                            <img src="/images/product/${product.image}" alt="${product.name}"
-                                                 class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <img src="/images/product/${product.image}"
+                                                 alt="${product.name}"
+                                                 class="rounded"
+                                                 style="width: 50px; height: 50px; object-fit: cover;">
                                         </div>
                                         <div class="flex-grow-1">
-                                            <div class="fw-bold">${product.name}</div>
-                                            <div class="small text-muted"><fmt:formatNumber value="${product.price}" type="currency"
-                                                                                            currencySymbol="₫" groupingUsed="true"/></div>
+                                            <div class="fw-bold">
+                                                <a href="/admin/product/${product.id}" class="text-decoration-none text-dark">
+                                                        ${product.name}
+                                                </a>
+                                            </div>
+                                            <div class="small text-muted">
+                                                <fmt:formatNumber value="${product.price}"
+                                                                  type="currency"
+                                                                  currencySymbol="₫"
+                                                                  groupingUsed="true"/>
+                                            </div>
                                         </div>
                                         <div class="text-end">
                                             <div class="fw-bold">
@@ -244,7 +305,8 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-6">
+                    <!-- Bảng Sản Phẩm Sắp Hết Hàng -->
+                    <div class="col-6">
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-exclamation-triangle me-1"></i>
@@ -254,11 +316,15 @@
                                 <c:forEach var="product" items="${lowStockProducts}" varStatus="status">
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="me-3">
-                                            <img src="/images/product/${product.image}" alt="${product.name}"
-                                                 class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <img src="/images/product/${product.image}"
+                                                 alt="${product.name}"
+                                                 class="rounded"
+                                                 style="width: 50px; height: 50px; object-fit: cover;">
                                         </div>
                                         <div class="flex-grow-1">
-                                            <div class="fw-bold">${product.name}</div>
+                                            <div class="fw-bold"><a href="/admin/product/${product.id}" class="text-decoration-none text-dark">
+                                                    ${product.name}
+                                            </a></div>
                                             <div class="small text-muted">Nhà sản xuất: ${product.factory}</div>
                                         </div>
                                         <div class="text-end">
