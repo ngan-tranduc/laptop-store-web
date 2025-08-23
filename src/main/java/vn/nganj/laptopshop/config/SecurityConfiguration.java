@@ -54,7 +54,7 @@ public class SecurityConfiguration {
     public SpringSessionRememberMeServices rememberMeServices() {
         SpringSessionRememberMeServices rememberMeServices =
                 new SpringSessionRememberMeServices();
-        // optionally customize
+
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
@@ -97,13 +97,12 @@ public class SecurityConfiguration {
                         .permitAll())
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
 
-                // QUAN TRỌNG: Cấu hình CSRF
                 .csrf(csrf -> csrf
-                                // Tùy chọn 1: Tắt CSRF cho cart endpoints (dễ nhất)
-                                .ignoringRequestMatchers("/cart/**")
+                                // Tắt CSRF cho cart và admin endpoints
+                                .ignoringRequestMatchers("/cart/**", "/admin/order/*/status", "/admin/order/*/update-status")
 
-                        // Tùy chọn 2: Hoặc cấu hình CSRF token repository
-                        // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        // Hoặc có thể tắt hoàn toàn cho toàn bộ admin (ít an toàn hơn):
+                        // .ignoringRequestMatchers("/cart/**", "/admin/**")
                 );
 
         return http.build();
