@@ -71,12 +71,12 @@
                             </li>
 
                             <!-- Menu Items -->
-                            <li class="px-2 py-1">
-                                <a class="dropdown-item rounded-3 px-3 py-2 d-flex align-items-center" href="#">
-                                    <i class="fas fa-user-cog me-3 text-primary" style="width: 20px;"></i>
-                                    <span>Quản lý tài khoản</span>
-                                </a>
-                            </li>
+<%--                            <li class="px-2 py-1">--%>
+<%--                                <a class="dropdown-item rounded-3 px-3 py-2 d-flex align-items-center" href="#">--%>
+<%--                                    <i class="fas fa-user-cog me-3 text-primary" style="width: 20px;"></i>--%>
+<%--                                    <span>Quản lý tài khoản</span>--%>
+<%--                                </a>--%>
+<%--                            </li>--%>
 
                             <li class="px-2 py-1">
                                 <a class="dropdown-item rounded-3 px-3 py-2 d-flex align-items-center" href="/order-history">
