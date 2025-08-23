@@ -1,7 +1,11 @@
 package vn.nganj.laptopshop.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -21,6 +25,11 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private java.util.List<OrderDetail> orderDetails;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+
     public Long getId() {
         return id;
     }
@@ -85,11 +94,26 @@ public class Order {
         this.orderDetails = orderDetails;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", totalPrice=" + totalPrice +
                 '}';
+    }
+
+    public String getFormattedCreatedAtWithTime() {
+        if (this.createdAt != null) {
+            return this.createdAt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+        }
+        return "";
     }
 }

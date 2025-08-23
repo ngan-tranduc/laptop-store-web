@@ -240,42 +240,43 @@
                 </ol>
 
                 <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stats-card pending h-100">
-                            <div class="card-body">
-                                <div class="stats-number">${pendingOrders}</div>
-                                <div class="stats-label">
+                <!-- Statistics Cards -->
+                <div class="row mb-4" style="display: flex;">
+                    <div class="col-xl-3 col-md-6" style="flex: 1; padding: 0 7.5px;">
+                        <div class="card h-100" style="background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; color: #856404;">${pendingOrders}</div>
+                                <div style="font-size: 0.9rem; color: #856404;">
                                     <i class="bi bi-clock me-1"></i>Chờ xác nhận
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stats-card confirmed h-100">
-                            <div class="card-body">
-                                <div class="stats-number">${confirmedOrders}</div>
-                                <div class="stats-label">
+                    <div class="col-xl-3 col-md-6" style="flex: 1; padding: 0 7.5px;">
+                        <div class="card h-100" style="background-color: #d1ecf1; border: 1px solid #17a2b8; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; color: #0c5460;">${confirmedOrders}</div>
+                                <div style="font-size: 0.9rem; color: #0c5460;">
                                     <i class="bi bi-check-circle me-1"></i>Đã xác nhận
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stats-card shipping h-100">
-                            <div class="card-body">
-                                <div class="stats-number">${shippingOrders}</div>
-                                <div class="stats-label">
+                    <div class="col-xl-3 col-md-6" style="flex: 1; padding: 0 7.5px;">
+                        <div class="card h-100" style="background-color: #e2e3ff; border: 1px solid #6f42c1; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; color: #493267;">${shippingOrders}</div>
+                                <div style="font-size: 0.9rem; color: #493267;">
                                     <i class="bi bi-truck me-1"></i>Đang giao
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card stats-card delivered h-100">
-                            <div class="card-body">
-                                <div class="stats-number">${deliveredOrders}</div>
-                                <div class="stats-label">
+                    <div class="col-xl-3 col-md-6" style="flex: 1; padding: 0 7.5px;">
+                        <div class="card h-100" style="background-color: #d4edda; border: 1px solid #28a745; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; color: #155724;">${deliveredOrders}</div>
+                                <div style="font-size: 0.9rem; color: #155724;">
                                     <i class="bi bi-check2-all me-1"></i>Hoàn thành
                                 </div>
                             </div>
@@ -543,11 +544,11 @@
                         <label for="orderStatus" class="form-label">Trạng thái mới:</label>
                         <select class="form-select" id="orderStatus" name="status" required>
                             <option value="">-- Chọn trạng thái --</option>
-                            <option value="PENDING">PENDING</option>
-                            <option value="CONFIRMED">CONFIRMED</option>
-                            <option value="SHIPPING">SHIPPING</option>
-                            <option value="DELIVERED">DELIVERED</option>
-                            <option value="CANCELLED">CANCELLED</option>
+                            <option value="PENDING">Chờ xác nhận</option>
+                            <option value="CONFIRMED">Xác nhận</option>
+                            <option value="SHIPPING">Đang giao hàng</option>
+                            <option value="DELIVERED">Hoàn thành</option>
+                            <option value="CANCELLED">Huỷ</option>
                         </select>
                     </div>
                     <div class="mb-3">

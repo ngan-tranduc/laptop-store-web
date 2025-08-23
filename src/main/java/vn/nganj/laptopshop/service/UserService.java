@@ -16,7 +16,9 @@ public class UserService {
         this.userRepository = userRepository;
         this.roleService = roleService;
     }
-
+    public int countUser() {
+        return (int) userRepository.count();
+    }
     public List<User> getAllUser() {
         return userRepository.findAllWithRoles();
     }

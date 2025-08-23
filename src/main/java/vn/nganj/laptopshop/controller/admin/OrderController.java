@@ -76,7 +76,7 @@ public class OrderController {
     }
 
     /**
-     * Xem chi tiết đơn hàng - FIXED URL mapping
+     * Xem chi tiết đơn hàng
      */
     @GetMapping("/{id}")
     public String showOrderDetail(@PathVariable Long id, Model model,
@@ -100,7 +100,7 @@ public class OrderController {
     }
 
     /**
-     * Cập nhật trạng thái đơn hàng - FIXED URL mapping
+     * Cập nhật trạng thái đơn hàng
      */
     @PostMapping("/{id}/update-status")
     public String updateOrderStatus(

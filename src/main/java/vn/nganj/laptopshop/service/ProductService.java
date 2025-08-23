@@ -1,10 +1,12 @@
 package vn.nganj.laptopshop.service;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import vn.nganj.laptopshop.domain.*;
 import vn.nganj.laptopshop.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,10 @@ public class ProductService {
     private final UserService userService;
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
+
+    public int countProduct() {
+        return (int) productRepository.count();
+    }
 
     public ProductService(ProductRepository productRepository, CartRepository cartRepository, UserRepository userRepository, CartDetailRepository cartDetailRepository, UserService userService, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository) {
         this.productRepository = productRepository;
@@ -110,17 +116,10 @@ public class ProductService {
             throw new RuntimeException("Product not found with id: " + productId);
         }
     }
-    public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress, String receiverPhone) {
+    public void handlePlaceOrder(User user, HttpSession session,
+                                 String receiverName, String receiverAddress, String receiverPhone) {
 
-        // Tạo đơn hàng mới
-        Order order = new Order();
-        order.setUser(user);
-        order.setReceiverName(receiverName);
-        order.setReceiverAddress(receiverAddress);
-        order.setReceiverPhone(receiverPhone);
-        order.setStatus("Pending");
-        order = this.orderRepository.save(order);
-
+        // Lấy giỏ hàng của user
         Cart cart = this.cartRepository.findByUser(user);
         if (cart == null || cart.getCartDetails().isEmpty()) {
             throw new RuntimeException("Cart is empty or not found for user: " + user.getEmail());
@@ -130,28 +129,48 @@ public class ProductService {
         double totalPrice = cart.getCartDetails().stream()
                 .mapToDouble(cd -> cd.getPrice() * cd.getQuantity())
                 .sum();
-        order.setTotalPrice(totalPrice);
 
-        // Lưu đơn hàng
+        // Tạo đơn hàng mới và set đầy đủ thông tin trước khi save
+        Order order = new Order();
+        order.setUser(user);
+        order.setReceiverName(receiverName);
+        order.setReceiverAddress(receiverAddress);
+        order.setReceiverPhone(receiverPhone);
+        order.setStatus("PENDING");
+        order.setTotalPrice(totalPrice);
+        order.setCreatedAt(LocalDateTime.now());
+
+        // Lưu đơn hàng (hibernate sẽ tự set createdAt)
         Order savedOrder = this.orderRepository.save(order);
 
         // Lưu chi tiết đơn hàng
-        for (CartDetail cartDetail : cart.getCartDetails()) {
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setOrder(savedOrder);
-            orderDetail.setProduct(cartDetail.getProduct());
-            orderDetail.setPrice(cartDetail.getPrice());
-            orderDetail.setQuantity(cartDetail.getQuantity());
-            this.orderDetailRepository.save(orderDetail);
-        }
+        List<OrderDetail> orderDetails = cart.getCartDetails().stream()
+                .map(cd -> {
+                    OrderDetail od = new OrderDetail();
+                    od.setOrder(savedOrder);
+                    od.setProduct(cd.getProduct());
+                    od.setPrice(cd.getPrice());
+                    od.setQuantity(cd.getQuantity());
+                    return od;
+                })
+                .collect(Collectors.toList());
+        this.orderDetailRepository.saveAll(orderDetails);
 
-        // Xóa giỏ hàng sau khi đặt hàng thành công
-        for(CartDetail cartDetail : cart.getCartDetails()) {
-            this.cartDetailRepository.deleteById(cartDetail.getId());
+        // Xóa giỏ hàng (nếu không cascade thì xóa chi tiết trước)
+        for (CartDetail cd : cart.getCartDetails()) {
+            this.cartDetailRepository.deleteById(cd.getId());
         }
         this.cartRepository.deleteById(cart.getId());
 
         // Cập nhật session
         session.setAttribute("sum", 0);
+    }
+
+    public List<Product> getTopSellingProducts(int limit) {
+        return productRepository.findTopSellingProducts(limit);
+    }
+
+    public List<Product> getLowStockProducts(int limit) {
+        return productRepository.findLowStockProducts(limit);
     }
 }
