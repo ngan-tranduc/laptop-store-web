@@ -4,6 +4,7 @@ package vn.nganj.laptopshop.service;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import vn.nganj.laptopshop.domain.Order;
+import vn.nganj.laptopshop.domain.User;
 import vn.nganj.laptopshop.repository.OrderRepository;
 
 import org.springframework.data.domain.Page;
@@ -25,6 +26,13 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    public Page<Order> getOrdersByUser(User user, Pageable pageable) {
+        return orderRepository.findByUserOrderByCreatedAtDesc(user, pageable);
+    }
+
+    public Page<Order> getOrdersByUserAndStatus(User user, String status, Pageable pageable) {
+        return orderRepository.findByUserAndStatusOrderByCreatedAtDesc(user, status, pageable);
+    }
     /**
      * Tìm đơn hàng theo ID
      */
@@ -213,21 +221,6 @@ public class OrderService {
 
         return stats;
     }
-
-    /**
-     * Tính doanh thu theo khoảng thời gian
-     */
-//    public Double getRevenueByDateRange(LocalDateTime fromDate, LocalDateTime toDate) {
-//        try {
-//            // Nếu Order entity có trường createdAt
-//            // return orderRepository.getRevenueBetweenDates(fromDate, toDate);
-//
-//            // Tạm thời trả về tổng doanh thu
-//            return getTotalRevenue();
-//        } catch (Exception e) {
-//            return 0.0;
-//        }
-//    }
 
     /**
      * Đếm đơn hàng theo trạng thái

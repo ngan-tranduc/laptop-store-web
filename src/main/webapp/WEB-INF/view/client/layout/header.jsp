@@ -21,7 +21,7 @@
 <%--                            <a href="404.html" class="dropdown-item">404 Page</a>--%>
 <%--                        </div>--%>
 <%--                    </div>--%>
-                    <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
+                    <a href="#" class="nav-item nav-link">Liên hệ</a>
                 </div>
                 <div class="d-flex m-3 me-0">
                     <c:if test="${not empty pageContext.request.userPrincipal}">
@@ -36,31 +36,104 @@
                             <i class="fas fa-user fa-2x"></i>
                         </a>
 
-                        <ul class="dropdown-menu dropdown-menu-end p-4" aria-labelledby="dropdownMenuLink">
-                            <li class="d-flex align-items-center flex-column" style="min-width: 300px;">
-                                <img style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden;"
-                                     src="/images/avatar/${sessionScope.avatar}" />
-                                <div class="text-center my-3">
-
-<%--                                <c:out value="${pageContext.request.userPrincipal.name}"/>--%>
-                                    <c:out value="${sessionScope.fullName}" default="Guest"/>
-
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="dropdownMenuLink" style="min-width: 280px; border-radius: 12px;">
+                            <!-- User Profile Section -->
+                            <li class="px-4 py-3 border-bottom">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <div class="position-relative mb-3">
+                                        <c:choose>
+                                            <c:when test="${not empty sessionScope.avatar}">
+                                                <img class="rounded-circle border border-2 border-light shadow-sm"
+                                                     style="width: 80px; height: 80px; object-fit: cover;"
+                                                     src="/images/avatar/${sessionScope.avatar}"
+                                                     alt="User Avatar"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                                <div class="d-none rounded-circle border border-2 border-light shadow-sm bg-light justify-content-center align-items-center"
+                                                     style="width: 80px; height: 80px;">
+                                                    <i class="fas fa-user text-muted" style="font-size: 2rem;"></i>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="rounded-circle border border-2 border-light shadow-sm bg-light d-flex justify-content-center align-items-center"
+                                                     style="width: 80px; height: 80px;">
+                                                    <i class="fas fa-user text-muted" style="font-size: 2rem;"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-2 border-white"
+                                             style="width: 20px; height: 20px;"></div>
+                                    </div>
+                                    <h6 class="mb-1 fw-semibold text-dark">
+                                        <c:out value="${sessionScope.fullName}" default="Guest"/>
+                                    </h6>
+                                    <small class="text-muted">Thành viên</small>
                                 </div>
                             </li>
 
-                            <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
-
-                            <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
+                            <!-- Menu Items -->
+                            <li class="px-2 py-1">
+                                <a class="dropdown-item rounded-3 px-3 py-2 d-flex align-items-center" href="#">
+                                    <i class="fas fa-user-cog me-3 text-primary" style="width: 20px;"></i>
+                                    <span>Quản lý tài khoản</span>
+                                </a>
                             </li>
-                            <li>
-                                <form method="post" action="/logout">
+
+                            <li class="px-2 py-1">
+                                <a class="dropdown-item rounded-3 px-3 py-2 d-flex align-items-center" href="/order-history">
+                                    <i class="fas fa-shopping-bag me-3 text-primary" style="width: 20px;"></i>
+                                    <span>Lịch sử mua hàng</span>
+                                </a>
+                            </li>
+
+                            <!-- Divider -->
+                            <li class="mx-3 my-2">
+                                <hr class="dropdown-divider border-top border-1 opacity-25">
+                            </li>
+
+                            <!-- Logout Section -->
+                            <li class="px-2 pb-2">
+                                <form method="post" action="/logout" class="m-0">
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                    <button class="dropdown-item" href="#">Đăng xuất</button>
+                                    <button type="submit" class="dropdown-item rounded-3 px-3 py-2 d-flex align-items-center text-danger border-0 bg-transparent w-100">
+                                        <i class="fas fa-sign-out-alt me-3" style="width: 20px;"></i>
+                                        <span>Đăng xuất</span>
+                                    </button>
                                 </form>
                             </li>
                         </ul>
+
+                        <style>
+                            /* Custom styles for better appearance */
+                            .dropdown-menu {
+                                --bs-dropdown-link-hover-bg: rgba(101, 153, 6, 0.1);
+                                --bs-dropdown-link-hover-color: #659906;
+                            }
+
+                            .dropdown-item:hover {
+                                background-color: var(--bs-dropdown-link-hover-bg) !important;
+                                color: var(--bs-dropdown-link-hover-color) !important;
+                                transform: translateX(2px);
+                                transition: all 0.2s ease;
+                            }
+
+                            .dropdown-item.text-danger:hover {
+                                background-color: rgba(220, 53, 69, 0.1) !important;
+                                color: #dc3545 !important;
+                            }
+
+                            .dropdown-menu::before {
+                                content: '';
+                                position: absolute;
+                                top: -8px;
+                                right: 20px;
+                                width: 0;
+                                height: 0;
+                                border-left: 8px solid transparent;
+                                border-right: 8px solid transparent;
+                                border-bottom: 8px solid white;
+                                filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.1));
+                            }
+                        </style>
                     </div>
                     </c:if>
                     <c:if test="${empty pageContext.request.userPrincipal}">

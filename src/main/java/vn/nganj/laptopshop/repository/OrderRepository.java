@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.nganj.laptopshop.domain.Order;
+import vn.nganj.laptopshop.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,9 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
+    Page<Order> findByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+
+    Page<Order> findByUserAndStatusOrderByCreatedAtDesc(User user, String status, Pageable pageable);
     /**
      * Đếm số đơn hàng theo trạng thái
      */
@@ -109,8 +113,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         AND YEAR(created_at) = YEAR(CURDATE())
         """, nativeQuery = true)
     Long countThisWeekOrders();
-
-    // ========== METHODS MỚI CHO DASHBOARD ==========
 
     /**
      * Tính doanh thu theo khoảng thời gian (cho biểu đồ 7 ngày)
